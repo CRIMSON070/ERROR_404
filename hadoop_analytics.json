@@ -1,0 +1,179 @@
+{
+  "team_analysis": {
+    "RCB": {
+      "total_players": 21,
+      "total_spent": 9825.0,
+      "avg_price": 467.86,
+      "premium_players": 5,
+      "batsmen": 5,
+      "bowlers": 9,
+      "allrounders": 7,
+      "keepers": 0,
+      "total_runs": 14609,
+      "total_wickets": 1070
+    },
+    "MI": {
+      "total_players": 23,
+      "total_spent": 11980.0,
+      "avg_price": 520.87,
+      "premium_players": 5,
+      "batsmen": 6,
+      "bowlers": 10,
+      "allrounders": 7,
+      "keepers": 0,
+      "total_runs": 16400,
+      "total_wickets": 1314
+    },
+    "SRH": {
+      "total_players": 20,
+      "total_spent": 11980.0,
+      "avg_price": 599.0,
+      "premium_players": 5,
+      "batsmen": 7,
+      "bowlers": 7,
+      "allrounders": 6,
+      "keepers": 0,
+      "total_runs": 22341,
+      "total_wickets": 984
+    },
+    "CSK": {
+      "total_players": 25,
+      "total_spent": 11995.0,
+      "avg_price": 479.8,
+      "premium_players": 4,
+      "batsmen": 7,
+      "bowlers": 7,
+      "allrounders": 11,
+      "keepers": 0,
+      "total_runs": 19700,
+      "total_wickets": 1288
+    },
+    "DC": {
+      "total_players": 23,
+      "total_spent": 11655.0,
+      "avg_price": 506.74,
+      "premium_players": 5,
+      "batsmen": 8,
+      "bowlers": 6,
+      "allrounders": 9,
+      "keepers": 0,
+      "total_runs": 19897,
+      "total_wickets": 1113
+    },
+    "KKR": {
+      "total_players": 21,
+      "total_spent": 10795.0,
+      "avg_price": 514.05,
+      "premium_players": 5,
+      "batsmen": 8,
+      "bowlers": 7,
+      "allrounders": 6,
+      "keepers": 0,
+      "total_runs": 18409,
+      "total_wickets": 1188
+    },
+    "RR": {
+      "total_players": 20,
+      "total_spent": 11970.0,
+      "avg_price": 598.5,
+      "premium_players": 6,
+      "batsmen": 6,
+      "bowlers": 10,
+      "allrounders": 4,
+      "keepers": 0,
+      "total_runs": 16858,
+      "total_wickets": 1120
+    },
+    "GT": {
+      "total_players": 25,
+      "total_spent": 11985.0,
+      "avg_price": 479.4,
+      "premium_players": 5,
+      "batsmen": 6,
+      "bowlers": 9,
+      "allrounders": 10,
+      "keepers": 0,
+      "total_runs": 17097,
+      "total_wickets": 1339
+    },
+    "LSG": {
+      "total_players": 24,
+      "total_spent": 11960.0,
+      "avg_price": 498.33,
+      "premium_players": 4,
+      "batsmen": 7,
+      "bowlers": 10,
+      "allrounders": 7,
+      "keepers": 0,
+      "total_runs": 20318,
+      "total_wickets": 1138
+    },
+    "PBKS": {
+      "total_players": 25,
+      "total_spent": 11965.0,
+      "avg_price": 478.6,
+      "premium_players": 4,
+      "batsmen": 7,
+      "bowlers": 7,
+      "allrounders": 11,
+      "keepers": 0,
+      "total_runs": 19384,
+      "total_wickets": 1269
+    },
+    "-": {
+      "total_players": 395,
+      "total_spent": 0.0,
+      "avg_price": 0.0,
+      "premium_players": 0,
+      "batsmen": 123,
+      "bowlers": 134,
+      "allrounders": 137,
+      "keepers": 1,
+      "total_runs": 124127,
+      "total_wickets": 3757
+    }
+  },
+  "role_analysis": {
+    "Batsman": {
+      "count": 190,
+      "total_price": 40895.0,
+      "avg_price": 215.24,
+      "total_runs": 208500,
+      "total_wickets": 0
+    },
+    "Bowler": {
+      "count": 216,
+      "total_price": 39730.0,
+      "avg_price": 183.94,
+      "total_runs": 0,
+      "total_wickets": 9656
+    },
+    "All-rounder": {
+      "count": 215,
+      "total_price": 35485.0,
+      "avg_price": 165.05,
+      "total_runs": 99903,
+      "total_wickets": 5924
+    },
+    "Wicket-keeper": {
+      "count": 1,
+      "total_price": 0.0,
+      "avg_price": 0.0,
+      "total_runs": 737,
+      "total_wickets": 0
+    }
+  },
+  "budget_analysis": {
+    "\u20b910-15 Cr": 28,
+    "\u20b92-5 Cr": 42,
+    "\u20b915+ Cr": 20,
+    "\u20b95-10 Cr": 27,
+    "\u20b90-2 Cr": 109,
+    "Unsold/TBA": 396
+  },
+  "total_players": 622,
+  "total_budget_spent": 116110.0,
+  "avg_player_price": 186.67,
+  "total_runs": 309140,
+  "total_wickets": 15580
+}

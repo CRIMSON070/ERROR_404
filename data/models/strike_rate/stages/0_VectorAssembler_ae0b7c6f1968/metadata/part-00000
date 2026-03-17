@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.VectorAssembler","timestamp":1771673269750,"sparkVersion":"3.5.0","uid":"VectorAssembler_ae0b7c6f1968","paramMap":{"outputCol":"features","handleInvalid":"skip","inputCols":["total_runs","balls_faced","boundary_pct","dismissals"]},"defaultParamMap":{"outputCol":"VectorAssembler_ae0b7c6f1968__output","handleInvalid":"error"}}

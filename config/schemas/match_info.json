@@ -1,0 +1,22 @@
+{
+  "table": "match_info",
+  "description": "Match metadata and results",
+  "primary_key": ["match_number"],
+  "columns": {
+    "match_number": {"type": "integer", "nullable": false},
+    "team1": {"type": "string", "nullable": false},
+    "team2": {"type": "string", "nullable": false},
+    "match_date": {"type": "string", "nullable": true},
+    "toss_winner": {"type": "string", "nullable": true},
+    "toss_decision": {"type": "string", "nullable": true},
+    "result": {"type": "string", "nullable": true},
+    "eliminator": {"type": "string", "nullable": true},
+    "winner": {"type": "string", "nullable": true},
+    "player_of_match": {"type": "string", "nullable": true},
+    "venue": {"type": "string", "nullable": true},
+    "city": {"type": "string", "nullable": true},
+    "team1_players": {"type": "string", "nullable": true},
+    "team2_players": {"type": "string", "nullable": true}
+  },
+  "required_columns": ["match_number", "team1", "team2"]
+}

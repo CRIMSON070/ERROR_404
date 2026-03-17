@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.VectorAssembler","timestamp":1771673271494,"sparkVersion":"3.5.0","uid":"VectorAssembler_00aaa74f906e","paramMap":{"outputCol":"features","handleInvalid":"skip","inputCols":["runs_conceded","balls_bowled","wickets"]},"defaultParamMap":{"outputCol":"VectorAssembler_00aaa74f906e__output","handleInvalid":"error"}}

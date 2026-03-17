@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Data Loading</title>
+</head>
+<body>
+    <h1>Testing Data Loading</h1>
+    <div id="output"></div>
+    
+    <script>
+        fetch('/dashboard_players.json')
+            .then(response => {
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data loaded successfully:', data.length);
+                document.getElementById('output').innerHTML = `
+                    <h2>Success!</h2>
+                    <p>Loaded ${data.length} players</p>
+                    <p>First player: ${data[0]?.name || 'Unknown'}</p>
+                    <p>Data type: ${Array.isArray(data) ? 'Array' : 'Object'}</p>
+                `;
+            })
+            .catch(error => {
+                console.error('Error loading data:', error);
+                document.getElementById('output').innerHTML = `
+                    <h2>Error!</h2>
+                    <p>${error.message}</p>
+                `;
+            });
+    </script>
+</body>
+</html>

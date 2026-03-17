@@ -1,0 +1,242 @@
+{
+  "team_analysis": {
+    "MI": {
+      "total_players": 66,
+      "total_spent": 502.0999999999999,
+      "avg_price": 7.61,
+      "premium_players": 2,
+      "batsmen": 0,
+      "bowlers": 19,
+      "allrounders": 0,
+      "keepers": 18
+    },
+    "PBKS": {
+      "total_players": 75,
+      "total_spent": 525.3000000000001,
+      "avg_price": 7.0,
+      "premium_players": 0,
+      "batsmen": 0,
+      "bowlers": 18,
+      "allrounders": 0,
+      "keepers": 18
+    },
+    "LSG": {
+      "total_players": 58,
+      "total_spent": 477.13000000000005,
+      "avg_price": 8.23,
+      "premium_players": 9,
+      "batsmen": 18,
+      "bowlers": 0,
+      "allrounders": 18,
+      "keepers": 0
+    },
+    "GT": {
+      "total_players": 62,
+      "total_spent": 495.95000000000005,
+      "avg_price": 8.0,
+      "premium_players": 2,
+      "batsmen": 0,
+      "bowlers": 18,
+      "allrounders": 0,
+      "keepers": 18
+    },
+    "RCB": {
+      "total_players": 62,
+      "total_spent": 514.6899999999999,
+      "avg_price": 8.3,
+      "premium_players": 7,
+      "batsmen": 19,
+      "bowlers": 0,
+      "allrounders": 18,
+      "keepers": 0
+    },
+    "KKR": {
+      "total_players": 57,
+      "total_spent": 468.8900000000001,
+      "avg_price": 8.23,
+      "premium_players": 1,
+      "batsmen": 0,
+      "bowlers": 18,
+      "allrounders": 0,
+      "keepers": 18
+    },
+    "SRH": {
+      "total_players": 62,
+      "total_spent": 552.1100000000001,
+      "avg_price": 8.91,
+      "premium_players": 10,
+      "batsmen": 18,
+      "bowlers": 0,
+      "allrounders": 18,
+      "keepers": 0
+    },
+    "CSK": {
+      "total_players": 57,
+      "total_spent": 436.6,
+      "avg_price": 7.66,
+      "premium_players": 6,
+      "batsmen": 18,
+      "bowlers": 0,
+      "allrounders": 18,
+      "keepers": 0
+    },
+    "RR": {
+      "total_players": 65,
+      "total_spent": 446.2799999999999,
+      "avg_price": 6.87,
+      "premium_players": 2,
+      "batsmen": 0,
+      "bowlers": 18,
+      "allrounders": 0,
+      "keepers": 18
+    },
+    "DC": {
+      "total_players": 59,
+      "total_spent": 441.60999999999996,
+      "avg_price": 7.48,
+      "premium_players": 7,
+      "batsmen": 18,
+      "bowlers": 0,
+      "allrounders": 18,
+      "keepers": 0
+    }
+  },
+  "role_analysis": {
+    "ob": {
+      "count": 55,
+      "total_price": 350.32,
+      "avg_price": 6.37,
+      "min_price": 0.25,
+      "max_price": 11.63
+    },
+    "NA": {
+      "count": 24,
+      "total_price": 124.37,
+      "avg_price": 5.18,
+      "min_price": 0.25,
+      "max_price": 11.35
+    },
+    "rm": {
+      "count": 38,
+      "total_price": 249.37,
+      "avg_price": 6.56,
+      "min_price": 0.66,
+      "max_price": 11.85
+    },
+    "rfm": {
+      "count": 20,
+      "total_price": 109.30999999999997,
+      "avg_price": 5.47,
+      "min_price": 0.4,
+      "max_price": 11.44
+    },
+    "sla": {
+      "count": 26,
+      "total_price": 162.95999999999998,
+      "avg_price": 6.27,
+      "min_price": 1.24,
+      "max_price": 11.34
+    },
+    "lm": {
+      "count": 5,
+      "total_price": 23.04,
+      "avg_price": 4.61,
+      "min_price": 0.56,
+      "max_price": 9.95
+    },
+    "lfm": {
+      "count": 11,
+      "total_price": 53.43,
+      "avg_price": 4.86,
+      "min_price": 1.17,
+      "max_price": 9.71
+    },
+    "rf": {
+      "count": 22,
+      "total_price": 124.88999999999996,
+      "avg_price": 5.68,
+      "min_price": 0.22,
+      "max_price": 11.12
+    },
+    "lb": {
+      "count": 20,
+      "total_price": 144.32000000000002,
+      "avg_price": 7.22,
+      "min_price": 0.58,
+      "max_price": 11.78
+    },
+    "rmf": {
+      "count": 13,
+      "total_price": 65.17999999999999,
+      "avg_price": 5.01,
+      "min_price": 0.3,
+      "max_price": 10.54
+    },
+    "lbg": {
+      "count": 13,
+      "total_price": 79.83000000000001,
+      "avg_price": 6.14,
+      "min_price": 0.66,
+      "max_price": 11.76
+    },
+    "lws": {
+      "count": 2,
+      "total_price": 16.41,
+      "avg_price": 8.21,
+      "min_price": 5.55,
+      "max_price": 10.86
+    },
+    "lf": {
+      "count": 2,
+      "total_price": 5.71,
+      "avg_price": 2.85,
+      "min_price": 2.23,
+      "max_price": 3.48
+    },
+    "lmf": {
+      "count": 10,
+      "total_price": 51.21,
+      "avg_price": 5.12,
+      "min_price": 0.32,
+      "max_price": 11.43
+    },
+    "Batsman": {
+      "count": 91,
+      "total_price": 810.6700000000001,
+      "avg_price": 8.91,
+      "min_price": 0.57,
+      "max_price": 17.83
+    },
+    "Bowler": {
+      "count": 91,
+      "total_price": 753.7500000000002,
+      "avg_price": 8.28,
+      "min_price": 0.84,
+      "max_price": 14.92
+    },
+    "All-rounder": {
+      "count": 90,
+      "total_price": 939.0700000000002,
+      "avg_price": 10.43,
+      "min_price": 0.82,
+      "max_price": 22.12
+    },
+    "Wicket-keeper": {
+      "count": 90,
+      "total_price": 796.8199999999999,
+      "avg_price": 8.85,
+      "min_price": 0.46,
+      "max_price": 15.97
+    }
+  },
+  "budget_analysis": {
+    "\u20b92-5 Cr": 118,
+    "\u20b95-10 Cr": 243,
+    "\u20b90-2 Cr": 68,
+    "\u20b910-15 Cr": 148,
+    "\u20b915+ Cr": 46
+  },
+  "total_players": 623,
+  "total_budget_spent": 4860.66,
+  "avg_player_price": 7.8
+}

@@ -1,0 +1,623 @@
+id,name,team,role,price,runs,wickets,strike_rate,economy,matches,budget_range
+player_1,Rajat Patidar,RCB,Batsman,1100.0,2609,0,183.6,0,205,₹10-15 Cr
+player_2,Yash Dayal,RCB,Bowler,500.0,0,105,0,5.97,96,₹2-5 Cr
+player_3,Jasprit Bumrah,MI,Bowler,1800.0,0,282,0,8.07,244,₹15+ Cr
+player_4,Suryakumar Yadav,MI,Batsman,1635.0000000000002,3588,0,222.8,0,258,₹15+ Cr
+player_5,Hardik Pandya,MI,All-rounder,1635.0000000000002,2012,172,194.6,9.07,186,₹15+ Cr
+player_6,Rohit Sharma,MI,Batsman,1630.0,4163,0,239.7,0,265,₹15+ Cr
+player_7,Tilak Varma,MI,All-rounder,800.0,938,82,148.4,6.76,97,₹5-10 Cr
+player_8,Heinrich Klaasen,SRH,Batsman,2300.0,5576,0,291.2,0,380,₹15+ Cr
+player_9,Pat Cummins,SRH,All-rounder,1800.0,1982,189,199.4,9.86,194,₹15+ Cr
+player_10,Abhishek Sharma,SRH,All-rounder,1400.0,1729,142,178.4,6.71,170,₹10-15 Cr
+player_11,Travis Head,SRH,Batsman,1400.0,3298,0,222.6,0,244,₹10-15 Cr
+player_12,Nitish Kumar Reddy,SRH,All-rounder,600.0,919,68,148.3,8.17,72,₹5-10 Cr
+player_13,Ruturaj Gaikwad,CSK,Batsman,1800.0,4446,0,254.4,0,291,₹15+ Cr
+player_14,Ravindra Jadeja,CSK,All-rounder,1800.0,2208,188,205.2,7.02,207,₹15+ Cr
+player_15,Matheesha Pathirana,CSK,Bowler,1300.0,0,207,0,6.01,172,₹10-15 Cr
+player_16,Shivam Dube,CSK,All-rounder,1200.0,1462,131,150.0,9.87,134,₹10-15 Cr
+player_17,MS Dhoni,CSK,Batsman,400.0,1380,0,127.6,0,98,₹2-5 Cr
+player_18,Axar Patel,DC,All-rounder,1650.0,1887,167,192.7,7.43,192,₹15+ Cr
+player_19,Kuldeep Yadav,DC,Bowler,1325.0,0,209,0,7.09,177,₹10-15 Cr
+player_20,Tristan Stubbs,DC,Batsman,1000.0,2477,0,184.3,0,174,₹5-10 Cr
+player_21,Abishek Porel,DC,Batsman,400.0,1453,0,130.4,0,90,₹2-5 Cr
+player_22,Rinku Singh,KKR,Batsman,1300.0,3528,0,201.8,0,231,₹10-15 Cr
+player_23,Varun Chakravarthy,KKR,All-rounder,1200.0,1422,140,167.3,9.12,132,₹10-15 Cr
+player_24,Sunil Narine,KKR,Bowler,1200.0,0,195,0,5.85,168,₹10-15 Cr
+player_25,Andre Russell,KKR,All-rounder,1200.0,1641,126,173.9,6.81,140,₹10-15 Cr
+player_26,Harshit Rana,KKR,Bowler,400.0,0,90,0,5.72,76,₹2-5 Cr
+player_27,Ramandeep Singh,KKR,All-rounder,400.0,670,55,133.6,8.19,74,₹2-5 Cr
+player_28,Sanju Samson,RR,Batsman,1800.0,3950,0,239.6,0,291,₹15+ Cr
+player_29,Yashasvi Jaiswal,RR,All-rounder,1800.0,2014,185,213.1,9.16,195,₹15+ Cr
+player_30,Riyan Parag,RR,All-rounder,1400.0,1861,149,195.6,7.33,155,₹10-15 Cr
+player_31,Dhruv Jurel,RR,Batsman,1400.0,3336,0,221.7,0,246,₹10-15 Cr
+player_32,Shimron Hetmyer,RR,Batsman,1100.0,2613,0,181.2,0,193,₹10-15 Cr
+player_33,Sandeep Sharma,RR,Bowler,400.0,0,73,0,6.9,83,₹2-5 Cr
+player_34,Rashid Khan,GT,Bowler,1800.0,0,294,0,7.87,235,₹15+ Cr
+player_35,Shubman Gill,GT,Batsman,1650.0,4223,0,238.4,0,266,₹15+ Cr
+player_36,Sai Sudharsan,GT,All-rounder,850.0,1310,105,164.7,8.24,110,₹5-10 Cr
+player_37,Rahul Tewatia,GT,All-rounder,400.0,846,48,109.7,7.16,61,₹2-5 Cr
+player_38,M Shahrukh Khan,GT,All-rounder,400.0,528,57,110.4,9.64,72,₹2-5 Cr
+player_39,Nicholas Pooran,LSG,Batsman,2100.0,5016,0,258.7,0,334,₹15+ Cr
+player_40,Ravi Bishnoi,LSG,Bowler,1100.0,0,188,0,7.63,167,₹10-15 Cr
+player_41,Mayank Yadav,LSG,Bowler,1100.0,0,187,0,8.62,142,₹10-15 Cr
+player_42,Mohsin Khan,LSG,Bowler,400.0,0,73,0,7.63,62,₹2-5 Cr
+player_43,Ayush Badoni,LSG,All-rounder,400.0,721,60,109.7,7.74,66,₹2-5 Cr
+player_44,Shashank Singh,PBKS,All-rounder,550.0,748,75,117.0,6.57,73,₹5-10 Cr
+player_45,Prabhsimran Singh,PBKS,Batsman,400.0,1266,0,127.5,0,70,₹2-5 Cr
+player_46,Jos Buttler,GT,Batsman,1575.0,3623,0,220.1,0,286,₹15+ Cr
+player_47,Shreyas Iyer,PBKS,Batsman,2675.0,6098,0,319.8,0,422,₹15+ Cr
+player_48,Rishabh Pant,LSG,Batsman,2700.0,6058,0,317.5,0,425,₹15+ Cr
+player_49,Kagiso Rabada,GT,Bowler,1075.0,0,170,0,6.03,146,₹10-15 Cr
+player_50,Arshdeep Singh,PBKS,Bowler,1800.0,0,279,0,6.89,231,₹15+ Cr
+player_51,Mitchell Starc,DC,Bowler,1175.0,0,199,0,7.75,149,₹10-15 Cr
+player_52,Yuzvendra Chahal,PBKS,Bowler,1800.0,0,278,0,6.77,233,₹15+ Cr
+player_53,Liam Livingstone,RCB,All-rounder,875.0,1334,90,131.1,9.15,108,₹5-10 Cr
+player_54,David Miller,LSG,Batsman,750.0,2278,0,175.6,0,161,₹5-10 Cr
+player_55,KL Rahul,DC,Batsman,1400.0,3397,0,216.9,0,253,₹10-15 Cr
+player_56,Mohammed Shami,SRH,Bowler,1000.0,0,166,0,7.46,147,₹5-10 Cr
+player_57,Mohammed Siraj,GT,Bowler,1225.0,0,199,0,6.38,176,₹10-15 Cr
+player_58,Harry Brook,DC,Batsman,625.0,2000,0,160.4,0,143,₹5-10 Cr
+player_59,Devon Conway,CSK,Batsman,625.0,1707,0,166.3,0,115,₹5-10 Cr
+player_60,Jake Fraser-McGurk,DC,Batsman,900.0,2744,0,190.5,0,150,₹5-10 Cr
+player_61,Aiden Markram,LSG,Batsman,200.0,916,0,124.1,0,79,₹0-2 Cr
+player_62,Devdutt Padikkal,RCB,Batsman,200.0,804,0,115.6,0,58,₹0-2 Cr
+player_63,Rahul Tripathi,CSK,Batsman,340.0,1448,0,126.3,0,96,₹2-5 Cr
+player_64,David Warner,-,Batsman,0.0,636,0,105.8,0,37,Unsold/TBA
+player_65,Ravichandran Ashwin,CSK,All-rounder,975.0,1147,106,157.6,9.76,120,₹5-10 Cr
+player_66,Venkatesh Iyer,KKR,All-rounder,2375.0,2557,242,228.1,9.1,260,₹15+ Cr
+player_67,Mitchell Marsh,LSG,All-rounder,340.0,499,40,102.0,6.9,48,₹2-5 Cr
+player_68,Glenn Maxwell,PBKS,All-rounder,420.0,649,62,114.4,8.13,60,₹2-5 Cr
+player_69,Harshal Patel,SRH,All-rounder,800.0,1095,84,161.8,7.63,100,₹5-10 Cr
+player_70,Rachin Ravindra,CSK,All-rounder,400.0,771,46,108.4,6.92,52,₹2-5 Cr
+player_71,Marcus Stoinis,PBKS,All-rounder,1100.0,1249,125,152.0,8.63,143,₹10-15 Cr
+player_72,Jonny Bairstow,-,Batsman,0.0,760,0,103.8,0,28,Unsold/TBA
+player_73,Quinton de Kock,KKR,Batsman,360.0,1672,0,125.6,0,102,₹2-5 Cr
+player_74,Rahmanullah Gurbaz,KKR,Batsman,200.0,998,0,133.7,0,71,₹0-2 Cr
+player_75,Ishan Kishan,SRH,Batsman,1125.0,3134,0,192.6,0,209,₹10-15 Cr
+player_76,Phil Salt,RCB,Batsman,1150.0,3250,0,203.7,0,218,₹10-15 Cr
+player_77,Jitesh Sharma,RCB,Batsman,1100.0,2787,0,201.3,0,181,₹10-15 Cr
+player_78,Khaleel Ahmed,CSK,Bowler,480.0,0,85,0,6.72,81,₹2-5 Cr
+player_79,Trent Boult,MI,Bowler,1250.0,0,217,0,8.0,189,₹10-15 Cr
+player_80,Josh Hazlewood,RCB,Bowler,1250.0,0,192,0,6.95,177,₹10-15 Cr
+player_81,Avesh Khan,LSG,Bowler,975.0,0,169,0,5.69,146,₹5-10 Cr
+player_82,Prasidh Krishna,GT,Bowler,950.0,0,171,0,8.76,140,₹5-10 Cr
+player_83,T Natarajan,DC,Bowler,1075.0,0,178,0,6.79,165,₹10-15 Cr
+player_84,Anrich Nortje,KKR,Bowler,650.0,0,124,0,5.86,117,₹5-10 Cr
+player_85,Noor Ahmad,CSK,Bowler,1000.0,0,177,0,7.34,129,₹5-10 Cr
+player_86,Rahul Chahar,SRH,Bowler,320.0,0,77,0,7.04,75,₹2-5 Cr
+player_87,Wanindu Hasaranga,RR,Bowler,525.0,0,95,0,6.75,92,₹5-10 Cr
+player_88,Waqar Salamkheil,-,Bowler,0.0,0,20,0,8.28,18,Unsold/TBA
+player_89,Maheesh Theekshana,RR,Bowler,440.00000000000006,0,88,0,6.52,76,₹2-5 Cr
+player_90,Adam Zampa,SRH,Bowler,240.0,0,55,0,7.79,45,₹2-5 Cr
+player_91,Yash Dhull,-,Batsman,0.0,613,0,103.1,0,45,Unsold/TBA
+player_92,Abhinav Manohar,SRH,Batsman,320.0,1529,0,122.2,0,81,₹2-5 Cr
+player_93,Karun Nair,DC,Batsman,50.0,892,0,102.6,0,46,₹0-2 Cr
+player_94,Angkrish Raghuvanshi,KKR,Batsman,300.0,1521,0,143.8,0,86,₹2-5 Cr
+player_95,Anmolpreet Singh,-,Batsman,0.0,801,0,117.3,0,35,Unsold/TBA
+player_96,Atharva Taide,SRH,Batsman,30.0,392,0,94.5,0,52,₹0-2 Cr
+player_97,Nehal Wadhera,PBKS,Batsman,420.0,1818,0,139.5,0,106,₹2-5 Cr
+player_98,Harpreet Brar,PBKS,All-rounder,150.0,469,24,101.9,8.49,28,₹0-2 Cr
+player_99,Naman Dhir,MI,All-rounder,525.0,725,67,144.4,6.89,63,₹5-10 Cr
+player_100,Mahipal Lomror,GT,All-rounder,170.0,344,26,88.1,7.1,50,₹0-2 Cr
+player_101,Sameer Rizvi,DC,All-rounder,95.0,524,23,117.0,7.34,30,₹0-2 Cr
+player_102,Abdul Samad,LSG,All-rounder,420.0,825,57,106.8,9.38,80,₹2-5 Cr
+player_103,Vijay Shankar,CSK,All-rounder,120.0,456,22,101.8,8.8,25,₹0-2 Cr
+player_104,Ashutosh Sharma,DC,All-rounder,380.0,692,49,134.6,6.97,53,₹2-5 Cr
+player_105,Nishant Sindhu,GT,All-rounder,30.0,187,10,84.6,8.71,28,₹0-2 Cr
+player_106,Utkarsh Singh,-,All-rounder,0.0,364,11,110.0,8.29,38,Unsold/TBA
+player_107,Aryan Juyal,LSG,Batsman,30.0,533,0,102.5,0,53,₹0-2 Cr
+player_108,Kumar Kushagra,GT,Batsman,65.0,877,0,108.5,0,29,₹0-2 Cr
+player_109,Robin Minz,MI,Batsman,65.0,955,0,125.2,0,24,₹0-2 Cr
+player_110,Anuj Rawat,GT,Batsman,30.0,915,0,109.1,0,21,₹0-2 Cr
+player_111,Luvnith Sisodia,KKR,Batsman,30.0,517,0,93.7,0,36,₹0-2 Cr
+player_112,Vishnu Vinod,PBKS,Batsman,95.0,660,0,112.0,0,43,₹0-2 Cr
+player_113,Upendra Yadav,-,Batsman,0.0,740,0,90.2,0,36,Unsold/TBA
+player_114,Vaibhav Arora,KKR,Bowler,180.0,0,53,0,7.26,55,₹0-2 Cr
+player_115,Rasikh Salam,RCB,Bowler,600.0,0,101,0,7.61,92,₹5-10 Cr
+player_116,Akash Madhwal,RR,Bowler,120.0,0,26,0,7.19,38,₹0-2 Cr
+player_117,Mohit Sharma,DC,Bowler,220.00000000000003,0,41,0,7.98,42,₹2-5 Cr
+player_118,Simarjeet Singh,SRH,Bowler,150.0,0,50,0,8.56,35,₹0-2 Cr
+player_119,Yash Thakur,PBKS,Bowler,160.0,0,40,0,6.02,57,₹0-2 Cr
+player_120,Kartik Tyagi,-,Bowler,0.0,0,8,0,6.11,32,Unsold/TBA
+player_121,Vijaykumar Vyshak,PBKS,Bowler,180.0,0,36,0,6.92,52,₹0-2 Cr
+player_122,Piyush Chawla,-,Bowler,0.0,0,30,0,6.79,26,Unsold/TBA
+player_123,Shreyas Gopal,CSK,Bowler,30.0,0,17,0,8.45,28,₹0-2 Cr
+player_124,Mayank Markande,KKR,Bowler,30.0,0,29,0,5.7,25,₹0-2 Cr
+player_125,Suyash Sharma,RCB,Bowler,260.0,0,52,0,7.18,60,₹2-5 Cr
+player_126,Karn Sharma,MI,Bowler,50.0,0,26,0,7.09,42,₹0-2 Cr
+player_127,Kumar Kartikeya,RR,Bowler,30.0,0,10,0,6.93,33,₹0-2 Cr
+player_128,Manav Suthar,GT,Bowler,30.0,0,23,0,7.88,41,₹0-2 Cr
+player_129,Mayank Agarawal,-,Batsman,0.0,875,0,90.7,0,15,Unsold/TBA
+player_130,Faf du Plessis,DC,Batsman,200.0,918,0,128.0,0,46,₹0-2 Cr
+player_131,Glenn Phillips,GT,Batsman,200.0,923,0,117.9,0,65,₹0-2 Cr
+player_132,Rovman Powell,KKR,Batsman,150.0,1038,0,116.6,0,41,₹0-2 Cr
+player_133,Ajinkya Rahane,KKR,Batsman,150.0,1080,0,130.7,0,32,₹0-2 Cr
+player_134,Prithvi Shaw,-,Batsman,0.0,555,0,112.9,0,18,Unsold/TBA
+player_135,Kane Williamson,-,Batsman,0.0,533,0,105.4,0,44,Unsold/TBA
+player_136,Sam Curran,CSK,All-rounder,240.0,552,31,113.1,9.33,37,₹2-5 Cr
+player_137,Marco Jansen,PBKS,All-rounder,700.0,1084,87,118.8,7.68,107,₹5-10 Cr
+player_138,Daryl Mitchell,-,All-rounder,0.0,490,14,93.5,7.26,23,Unsold/TBA
+player_139,Krunal Pandya,RCB,All-rounder,575.0,928,61,135.3,8.4,84,₹5-10 Cr
+player_140,Nitish Rana,RR,All-rounder,420.0,693,48,130.1,6.73,80,₹2-5 Cr
+player_141,Washington Sundar,GT,All-rounder,320.0,782,38,94.3,9.79,54,₹2-5 Cr
+player_142,Shardul Thakur,-,All-rounder,0.0,145,18,85.8,6.96,31,Unsold/TBA
+player_143,Srikar Bharat,-,Batsman,0.0,716,0,97.4,0,37,Unsold/TBA
+player_144,Alex Carey,-,Batsman,0.0,757,0,118.0,0,13,Unsold/TBA
+player_145,Donovan Ferreira,DC,Batsman,75.0,782,0,107.5,0,46,₹0-2 Cr
+player_146,Shai Hope,-,Batsman,0.0,638,0,108.3,0,10,Unsold/TBA
+player_147,Josh Inglis,PBKS,Batsman,260.0,1021,0,116.3,0,50,₹2-5 Cr
+player_148,Ryan Rickelton,MI,Batsman,100.0,940,0,102.4,0,28,₹0-2 Cr
+player_149,Deepak Chahar,MI,Bowler,925.0,0,150,0,6.78,126,₹5-10 Cr
+player_150,Gerald Coetzee,GT,Bowler,240.0,0,41,0,8.19,40,₹2-5 Cr
+player_151,Akash Deep,LSG,Bowler,800.0,0,149,0,8.97,115,₹5-10 Cr
+player_152,Tushar Deshpande,RR,Bowler,650.0,0,116,0,8.01,105,₹5-10 Cr
+player_153,Lockie Ferguson,PBKS,Bowler,200.0,0,60,0,5.61,53,₹0-2 Cr
+player_154,Bhuvneshwar Kumar,RCB,Bowler,1075.0,0,179,0,8.32,169,₹10-15 Cr
+player_155,Mukesh Kumar,DC,Bowler,800.0,0,135,0,5.94,120,₹5-10 Cr
+player_156,AM Ghazanfar,MI,Bowler,480.0,0,86,0,6.09,80,₹2-5 Cr
+player_157,Akeal Hosein,-,Bowler,0.0,0,6,0,8.02,15,Unsold/TBA
+player_158,Keshav Maharaj,-,Bowler,0.0,0,25,0,6.79,12,Unsold/TBA
+player_159,Mujeeb Ur Rahman,-,Bowler,0.0,0,27,0,6.16,23,Unsold/TBA
+player_160,Adil Rashid,-,Bowler,0.0,0,16,0,8.65,28,Unsold/TBA
+player_161,Vijayakanth Viyaskanth,-,Bowler,0.0,0,8,0,6.37,23,Unsold/TBA
+player_162,Ricky Bhui,-,Batsman,0.0,875,0,94.6,0,26,Unsold/TBA
+player_163,Swastik Chikara,RCB,Batsman,30.0,633,0,97.8,0,17,₹0-2 Cr
+player_164,Aarya Desai,-,Batsman,0.0,963,0,117.1,0,34,Unsold/TBA
+player_165,Shubham Dubey,RR,Batsman,80.0,779,0,111.2,0,33,₹0-2 Cr
+player_166,Madhav Kaushik,-,Batsman,0.0,505,0,100.7,0,39,Unsold/TBA
+player_167,Pukhraj Mann,-,Batsman,0.0,859,0,115.6,0,12,Unsold/TBA
+player_168,Shaik Rasheed,CSK,Batsman,30.0,729,0,94.3,0,33,₹0-2 Cr
+player_169,Himmat Singh,LSG,Batsman,30.0,1020,0,120.4,0,36,₹0-2 Cr
+player_170,Mayank Dagar,-,All-rounder,0.0,331,5,77.9,8.07,28,Unsold/TBA
+player_171,Anshul Kamboj,CSK,All-rounder,340.0,520,53,112.4,7.25,51,₹2-5 Cr
+player_172,Arshad Khan,GT,All-rounder,130.0,378,17,101.9,8.86,40,₹0-2 Cr
+player_173,Darshan Nalkande,DC,All-rounder,30.0,527,10,89.3,9.86,30,₹0-2 Cr
+player_174,Suyash Prabhudessai,-,All-rounder,0.0,128,14,86.5,7.23,12,Unsold/TBA
+player_175,Anukul Roy,KKR,All-rounder,40.0,199,19,89.3,8.89,37,₹0-2 Cr
+player_176,Swapnil Singh,RCB,All-rounder,50.0,519,14,92.1,7.95,19,₹0-2 Cr
+player_177,Sanvir Singh,-,All-rounder,0.0,435,9,75.3,9.2,24,Unsold/TBA
+player_178,Aravelly Avanish,-,Batsman,0.0,918,0,119.3,0,11,Unsold/TBA
+player_179,Vansh Bedi,CSK,Batsman,55.00000000000001,449,0,118.5,0,29,₹0-2 Cr
+player_180,Saurav Chauhan,-,Batsman,0.0,921,0,91.8,0,11,Unsold/TBA
+player_181,Harvik Desai,-,Batsman,0.0,383,0,92.4,0,37,Unsold/TBA
+player_182,Tom Kohler-Cadmore,-,Batsman,0.0,364,0,98.9,0,44,Unsold/TBA
+player_183,Kunal Singh Rathore,RR,Batsman,30.0,690,0,93.8,0,27,₹0-2 Cr
+player_184,BR Sharath,-,Batsman,0.0,340,0,100.1,0,36,Unsold/TBA
+player_185,Gurnoor Brar,GT,Bowler,130.0,0,38,0,8.25,32,₹0-2 Cr
+player_186,Mukesh Choudhary,CSK,Bowler,30.0,0,34,0,6.19,42,₹0-2 Cr
+player_187,Sakib Hussain,-,Bowler,0.0,0,24,0,8.66,35,Unsold/TBA
+player_188,Vidwath Kaverappa,-,Bowler,0.0,0,23,0,7.06,16,Unsold/TBA
+player_189,Rajan Kumar,-,Bowler,0.0,0,24,0,7.33,39,Unsold/TBA
+player_190,Sushant Mishra,-,Bowler,0.0,0,11,0,8.76,26,Unsold/TBA
+player_191,Arjun Tendulkar,MI,Bowler,30.0,0,20,0,7.46,12,₹0-2 Cr
+player_192,Zeeshan Ansari,SRH,Bowler,40.0,0,29,0,7.78,42,₹0-2 Cr
+player_193,Prince Choudhary,-,Bowler,0.0,0,16,0,5.76,22,Unsold/TBA
+player_194,Himanshu Sharma,-,Bowler,0.0,0,12,0,5.87,37,Unsold/TBA
+player_195,Manimaran Siddharth,LSG,Bowler,75.0,0,32,0,8.89,43,₹0-2 Cr
+player_196,Digvesh Singh,LSG,Bowler,30.0,0,34,0,5.85,16,₹0-2 Cr
+player_197,Prashant Solanki,-,Bowler,0.0,0,14,0,7.6,13,Unsold/TBA
+player_198,Jhathavedh Subramanyan,-,Bowler,0.0,0,13,0,7.57,16,Unsold/TBA
+player_199,Finn Allen,-,Batsman,0.0,436,0,91.6,0,45,Unsold/TBA
+player_200,Dewald Brevis,-,Batsman,0.0,442,0,117.8,0,30,Unsold/TBA
+player_201,Ben Duckett,-,Batsman,0.0,353,0,101.2,0,35,Unsold/TBA
+player_202,Manish Pandey,KKR,Batsman,75.0,950,0,121.1,0,37,₹0-2 Cr
+player_203,Rilee Rossouw,-,Batsman,0.0,745,0,96.1,0,45,Unsold/TBA
+player_204,Sherfane Rutherford,GT,Batsman,260.0,934,0,131.6,0,66,₹2-5 Cr
+player_205,Ashton Turner,-,Batsman,0.0,404,0,117.1,0,50,Unsold/TBA
+player_206,James Vince,-,Batsman,0.0,683,0,115.0,0,25,Unsold/TBA
+player_207,Shahbaz Ahmed,LSG,All-rounder,240.0,652,42,91.1,6.65,35,₹2-5 Cr
+player_208,Moeen Ali,KKR,All-rounder,200.0,616,30,102.4,9.33,55,₹0-2 Cr
+player_209,Tim David,RCB,All-rounder,300.0,517,49,97.3,6.9,41,₹2-5 Cr
+player_210,Deepak Hooda,CSK,All-rounder,170.0,606,29,86.3,6.77,25,₹0-2 Cr
+player_211,Will Jacks,MI,All-rounder,525.0,658,54,144.3,8.94,81,₹5-10 Cr
+player_212,Azmatullah Omarzai,PBKS,All-rounder,240.0,563,38,122.1,8.99,50,₹2-5 Cr
+player_213,Sai Kishore,GT,All-rounder,200.0,694,35,96.5,8.08,57,₹0-2 Cr
+player_214,Romario Shepherd,RCB,All-rounder,150.0,274,24,94.0,7.55,52,₹0-2 Cr
+player_215,Tom Banton,-,Batsman,0.0,865,0,112.3,0,42,Unsold/TBA
+player_216,Sam Billings,-,Batsman,0.0,357,0,109.6,0,37,Unsold/TBA
+player_217,Jordan Cox,-,Batsman,0.0,910,0,116.7,0,36,Unsold/TBA
+player_218,Ben McDermott,-,Batsman,0.0,983,0,100.2,0,12,Unsold/TBA
+player_219,Kusal Mendis,-,Batsman,0.0,827,0,115.2,0,47,Unsold/TBA
+player_220,Kusal Perera,-,Batsman,0.0,808,0,114.9,0,13,Unsold/TBA
+player_221,Josh Philippe,-,Batsman,0.0,864,0,114.6,0,13,Unsold/TBA
+player_222,Tim Seifert,-,Batsman,0.0,689,0,92.4,0,14,Unsold/TBA
+player_223,Nandre Burger,-,Bowler,0.0,0,29,0,7.52,13,Unsold/TBA
+player_224,Spencer Johnson,KKR,Bowler,280.0,0,50,0,6.94,66,₹2-5 Cr
+player_225,Umran Malik,KKR,Bowler,75.0,0,35,0,6.18,37,₹0-2 Cr
+player_226,Mustafizur Rahman,-,Bowler,0.0,0,10,0,6.11,13,Unsold/TBA
+player_227,Ishant Sharma,GT,Bowler,75.0,0,24,0,6.11,26,₹0-2 Cr
+player_228,Nuwan Thushara,RCB,Bowler,160.0,0,36,0,8.44,39,₹0-2 Cr
+player_229,Naveen-ul-Haq,-,Bowler,0.0,0,18,0,7.75,32,Unsold/TBA
+player_230,Jaydev Unadkat,SRH,Bowler,100.0,0,39,0,7.33,51,₹0-2 Cr
+player_231,Umesh Yadav,-,Bowler,0.0,0,20,0,7.32,31,Unsold/TBA
+player_232,Rishad Hossain,-,Bowler,0.0,0,5,0,6.6,27,Unsold/TBA
+player_233,Zahir Khan,-,Bowler,0.0,0,12,0,5.87,25,Unsold/TBA
+player_234,Nqabayomzi Peter,-,Bowler,0.0,0,26,0,8.83,23,Unsold/TBA
+player_235,Tanveer Sangha,-,Bowler,0.0,0,10,0,7.95,10,Unsold/TBA
+player_236,Tabraiz Shamsi,-,Bowler,0.0,0,7,0,8.93,16,Unsold/TBA
+player_237,Jeffrey Vandersay,-,Bowler,0.0,0,16,0,8.15,35,Unsold/TBA
+player_238,Sachin Baby,SRH,Batsman,30.0,769,0,105.0,0,35,₹0-2 Cr
+player_239,Priyam Garg,-,Batsman,0.0,779,0,101.1,0,26,Unsold/TBA
+player_240,Harnoor Singh,PBKS,Batsman,30.0,760,0,119.4,0,45,₹0-2 Cr
+player_241,R Smaran,-,Batsman,0.0,936,0,102.2,0,18,Unsold/TBA
+player_242,Shashwat Rawat,-,Batsman,0.0,733,0,100.7,0,49,Unsold/TBA
+player_243,C Andre Siddarth,CSK,Batsman,30.0,812,0,111.4,0,36,₹0-2 Cr
+player_244,Avneesh Sudha,-,Batsman,0.0,374,0,117.5,0,31,Unsold/TBA
+player_245,Apoorv Wankhade,-,Batsman,0.0,834,0,110.0,0,43,Unsold/TBA
+player_246,Yudhvir Singh,RR,All-rounder,35.0,197,8,113.7,8.21,39,₹0-2 Cr
+player_247,Rishi Dhawan,-,All-rounder,0.0,263,10,100.5,7.61,8,Unsold/TBA
+player_248,Rajvardhan Hangargekar,LSG,All-rounder,30.0,451,13,84.0,7.78,40,₹0-2 Cr
+player_249,Tanush Kotian,-,All-rounder,0.0,286,12,78.4,7.01,17,Unsold/TBA
+player_250,Arshin Kulkarni,LSG,All-rounder,30.0,235,9,105.4,9.17,22,₹0-2 Cr
+player_251,Shams Mulani,-,All-rounder,0.0,424,4,113.2,8.36,28,Unsold/TBA
+player_252,Shivam Singh,-,All-rounder,0.0,136,3,109.3,8.6,13,Unsold/TBA
+player_253,Lalit Yadav,-,All-rounder,0.0,305,11,94.7,9.36,10,Unsold/TBA
+player_254,Mohammed Azharuddeen,-,Batsman,0.0,506,0,93.4,0,36,Unsold/TBA
+player_255,LR Chethan,-,Batsman,0.0,651,0,92.3,0,42,Unsold/TBA
+player_256,Aryaman Singh,-,Batsman,0.0,860,0,119.6,0,38,Unsold/TBA
+player_257,Urvil Patel,-,Batsman,0.0,951,0,92.4,0,46,Unsold/TBA
+player_258,Sanskar Rawat,-,Batsman,0.0,450,0,118.7,0,48,Unsold/TBA
+player_259,Bipin Saurabh,-,Batsman,0.0,659,0,113.6,0,13,Unsold/TBA
+player_260,Tanay Thyagarajan,-,Batsman,0.0,728,0,117.1,0,39,Unsold/TBA
+player_261,Money Grewal,-,Bowler,0.0,0,19,0,6.02,35,Unsold/TBA
+player_262,Ashwani Kumar,MI,Bowler,30.0,0,33,0,5.88,43,₹0-2 Cr
+player_263,Ishan Porel,-,Bowler,0.0,0,23,0,5.62,12,Unsold/TBA
+player_264,Abhilash Shetty,-,Bowler,0.0,0,13,0,6.49,29,Unsold/TBA
+player_265,Akash Singh,LSG,Bowler,30.0,0,12,0,7.37,38,₹0-2 Cr
+player_266,Gurjapneet Singh,CSK,Bowler,220.00000000000003,0,46,0,6.39,56,₹2-5 Cr
+player_267,Basil Thampi,-,Bowler,0.0,0,11,0,7.35,31,Unsold/TBA
+player_268,Murugan Ashwin,-,Bowler,0.0,0,8,0,8.11,11,Unsold/TBA
+player_269,Shreyas Chavan,-,Bowler,0.0,0,18,0,8.17,17,Unsold/TBA
+player_270,Chintal Gandhi,-,Bowler,0.0,0,23,0,7.13,26,Unsold/TBA
+player_271,Raghav Goyal,-,Bowler,0.0,0,19,0,7.19,34,Unsold/TBA
+player_272,Jagadeesha Suchith,-,Bowler,0.0,0,8,0,8.49,14,Unsold/TBA
+player_273,Roshan Waghsare,-,Bowler,0.0,0,22,0,6.45,28,Unsold/TBA
+player_274,Bailapudi Yeswanth,-,Bowler,0.0,0,8,0,8.9,15,Unsold/TBA
+player_275,Sediqullah Atal,-,Batsman,0.0,484,0,117.5,0,27,Unsold/TBA
+player_276,Matthew Breetzke,LSG,Batsman,75.0,674,0,109.6,0,56,₹0-2 Cr
+player_277,Mark Chapman,-,Batsman,0.0,712,0,93.0,0,18,Unsold/TBA
+player_278,Brandon King,-,Batsman,0.0,951,0,98.6,0,11,Unsold/TBA
+player_279,Evin Lewis,-,Batsman,0.0,403,0,97.9,0,23,Unsold/TBA
+player_280,Pathum Nissanka,-,Batsman,0.0,464,0,109.6,0,29,Unsold/TBA
+player_281,Bhanuka Rajapaksa,-,Batsman,0.0,385,0,115.6,0,11,Unsold/TBA
+player_282,Steven Smith,-,Batsman,0.0,708,0,117.7,0,44,Unsold/TBA
+player_283,Gus Atkinson,-,All-rounder,0.0,132,12,76.5,7.54,37,Unsold/TBA
+player_284,Tom Curran,-,All-rounder,0.0,229,13,78.9,7.6,35,Unsold/TBA
+player_285,Krishnappa Gowtham,-,All-rounder,0.0,414,11,104.3,8.61,36,Unsold/TBA
+player_286,Mohammad Nabi,-,All-rounder,0.0,155,12,87.2,6.84,19,Unsold/TBA
+player_287,Gulbadin Naib,-,All-rounder,0.0,320,2,86.1,7.15,31,Unsold/TBA
+player_288,Sikandar Raza,-,All-rounder,0.0,120,11,85.4,9.43,25,Unsold/TBA
+player_289,Mitchell Santner,MI,All-rounder,200.0,450,28,121.4,7.1,53,₹0-2 Cr
+player_290,Jayant Yadav,GT,All-rounder,75.0,300,18,84.3,7.67,38,₹0-2 Cr
+player_291,Johnson Charles,-,Batsman,0.0,507,0,91.0,0,33,Unsold/TBA
+player_292,Litton Das,-,Batsman,0.0,803,0,119.7,0,30,Unsold/TBA
+player_293,Andre Fletcher,-,Batsman,0.0,312,0,118.6,0,41,Unsold/TBA
+player_294,Tom Latham,-,Batsman,0.0,744,0,115.7,0,38,Unsold/TBA
+player_295,Ollie Pope,-,Batsman,0.0,861,0,97.3,0,16,Unsold/TBA
+player_296,Kyle Verreynne,-,Batsman,0.0,703,0,111.5,0,25,Unsold/TBA
+player_297,Fazalhaq Farooqi,RR,Bowler,200.0,0,44,0,7.54,37,₹0-2 Cr
+player_298,Richard Gleeson,-,Bowler,0.0,0,30,0,8.02,30,Unsold/TBA
+player_299,Matt Henry,-,Bowler,0.0,0,17,0,6.42,33,Unsold/TBA
+player_300,Alzarri Joseph,-,Bowler,0.0,0,21,0,7.75,11,Unsold/TBA
+player_301,Kwena Maphaka,RR,Bowler,150.0,0,33,0,5.5,33,₹0-2 Cr
+player_302,Kuldeep Sen,PBKS,Bowler,80.0,0,17,0,7.59,20,₹0-2 Cr
+player_303,Reece Topley,MI,Bowler,75.0,0,34,0,5.6,35,₹0-2 Cr
+player_304,Lizaad Williams,MI,Bowler,75.0,0,25,0,7.37,32,₹0-2 Cr
+player_305,Luke Wood,-,Bowler,0.0,0,21,0,5.9,20,Unsold/TBA
+player_306,Sachin Dhas,-,Batsman,0.0,441,0,113.6,0,24,Unsold/TBA
+player_307,Leus du Plooy,-,Batsman,0.0,467,0,113.8,0,44,Unsold/TBA
+player_308,Ashwin Hebbar,-,Batsman,0.0,655,0,94.7,0,30,Unsold/TBA
+player_309,Rohan  Kunnummal,-,Batsman,0.0,356,0,111.7,0,17,Unsold/TBA
+player_310,Ayush Pandey,-,Batsman,0.0,931,0,110.5,0,24,Unsold/TBA
+player_311,Akshat Raghuwanshi,-,Batsman,0.0,638,0,91.9,0,47,Unsold/TBA
+player_312,Shoun Roger,-,Batsman,0.0,700,0,96.0,0,27,Unsold/TBA
+player_313,Virat Singh,-,Batsman,0.0,736,0,114.4,0,35,Unsold/TBA
+player_314,Priyansh Arya,PBKS,All-rounder,380.0,659,44,129.9,7.57,73,₹2-5 Cr
+player_315,Manoj Bhandage,RCB,All-rounder,30.0,252,23,110.7,6.53,26,₹0-2 Cr
+player_316,Praveen Dubey,PBKS,All-rounder,30.0,458,23,116.5,8.37,35,₹0-2 Cr
+player_317,Ajay Mandal,DC,All-rounder,30.0,256,19,98.7,9.0,25,₹0-2 Cr
+player_318,Prerak Mankad,-,All-rounder,0.0,135,2,97.5,6.63,16,Unsold/TBA
+player_319,Vipraj Nigam,DC,All-rounder,50.0,251,13,88.5,9.05,27,₹0-2 Cr
+player_320,Vicky Ostwal,-,All-rounder,0.0,312,14,80.1,7.84,8,Unsold/TBA
+player_321,Shivalik Sharma,-,All-rounder,0.0,179,10,110.7,9.53,35,Unsold/TBA
+player_322,Salil Arora,-,Batsman,0.0,899,0,110.1,0,15,Unsold/TBA
+player_323,Dinesh Bana,-,Batsman,0.0,913,0,94.6,0,12,Unsold/TBA
+player_324,Guruswamy Ajitesh,-,Batsman,0.0,843,0,93.8,0,11,Unsold/TBA
+player_325,Narayan Jagadeesan,-,Batsman,0.0,620,0,107.6,0,47,Unsold/TBA
+player_326,Krishnan Shrijith,MI,Batsman,30.0,627,0,101.0,0,29,₹0-2 Cr
+player_327,Michael Pepper,-,Batsman,0.0,511,0,91.2,0,14,Unsold/TBA
+player_328,Vishnu Solanki,-,Batsman,0.0,975,0,104.9,0,33,Unsold/TBA
+player_329,KM Asif,-,Bowler,0.0,0,23,0,6.02,7,Unsold/TBA
+player_330,Akhil Chaudhary,-,Bowler,0.0,0,18,0,8.13,12,Unsold/TBA
+player_331,Himanshu Chauhan,-,Bowler,0.0,0,11,0,8.95,23,Unsold/TBA
+player_332,Arpit Guleria,-,Bowler,0.0,0,10,0,8.52,38,Unsold/TBA
+player_333,Saranu Nishanth,-,Bowler,0.0,0,26,0,8.44,38,Unsold/TBA
+player_334,Kuldip Yadav,-,Bowler,0.0,0,17,0,5.93,35,Unsold/TBA
+player_335,Prithvi Raj,-,Bowler,0.0,0,24,0,5.82,18,Unsold/TBA
+player_336,Shubham Agarwal,-,Bowler,0.0,0,7,0,7.09,28,Unsold/TBA
+player_337,Jasinder Singh,-,Bowler,0.0,0,23,0,7.68,10,Unsold/TBA
+player_338,Jasmer Dhankhar,-,Bowler,0.0,0,24,0,7.49,36,Unsold/TBA
+player_339,Pulkit Narang,-,Bowler,0.0,0,6,0,7.47,20,Unsold/TBA
+player_340,Saumy Pandey,-,Bowler,0.0,0,20,0,7.17,34,Unsold/TBA
+player_341,Mohit Rathee,RCB,Bowler,30.0,0,28,0,7.59,34,₹0-2 Cr
+player_342,Himanshu Singh,-,Bowler,0.0,0,5,0,8.22,24,Unsold/TBA
+player_343,Towhid Hridoy,-,Batsman,0.0,856,0,115.8,0,16,Unsold/TBA
+player_344,Mikyle Louis,-,Batsman,0.0,636,0,92.3,0,44,Unsold/TBA
+player_345,Harry Tector,-,Batsman,0.0,571,0,105.1,0,27,Unsold/TBA
+player_346,Rassie van der Dussen,-,Batsman,0.0,686,0,112.0,0,39,Unsold/TBA
+player_347,Will Young,-,Batsman,0.0,562,0,93.1,0,26,Unsold/TBA
+player_348,Najibullah Zadran,-,Batsman,0.0,434,0,112.7,0,21,Unsold/TBA
+player_349,Ibrahim Zadran,-,Batsman,0.0,542,0,116.0,0,42,Unsold/TBA
+player_350,Sean Abbott,-,All-rounder,0.0,255,6,104.7,9.15,13,Unsold/TBA
+player_351,Jacob Bethell,RCB,All-rounder,260.0,702,45,125.7,9.15,62,₹2-5 Cr
+player_352,Brydon Carse,SRH,All-rounder,100.0,397,18,92.8,7.98,19,₹0-2 Cr
+player_353,Aaron Hardie,PBKS,All-rounder,125.0,316,32,118.3,9.94,24,₹0-2 Cr
+player_354,Sarfaraz Khan,-,All-rounder,0.0,275,16,89.4,9.94,16,Unsold/TBA
+player_355,Kyle Mayers,-,All-rounder,0.0,248,20,80.8,7.94,13,Unsold/TBA
+player_356,Kamindu Mendis,SRH,All-rounder,75.0,489,23,97.8,7.99,27,₹0-2 Cr
+player_357,Matthew Short,-,All-rounder,0.0,386,17,97.3,6.87,19,Unsold/TBA
+player_358,Jason Behrendorff,-,Bowler,0.0,0,6,0,7.52,10,Unsold/TBA
+player_359,Dushmantha Chameera,DC,Bowler,75.0,0,31,0,8.33,43,₹0-2 Cr
+player_360,Nathan Ellis,CSK,Bowler,200.0,0,45,0,8.09,55,₹0-2 Cr
+player_361,Shamar Joseph,LSG,Bowler,75.0,0,40,0,7.88,34,₹0-2 Cr
+player_362,Josh Little,-,Bowler,0.0,0,10,0,7.65,9,Unsold/TBA
+player_363,Shivam Mavi,-,Bowler,0.0,0,9,0,7.43,25,Unsold/TBA
+player_364,Jhye Richardson,-,Bowler,0.0,0,22,0,6.54,21,Unsold/TBA
+player_365,Navdeep Saini,-,Bowler,0.0,0,13,0,6.83,9,Unsold/TBA
+player_366,Tanmay Agarwal,-,Batsman,0.0,872,0,98.8,0,16,Unsold/TBA
+player_367,Amandeep Khare,-,Batsman,0.0,461,0,93.5,0,27,Unsold/TBA
+player_368,Ayush Mhatre,-,Batsman,0.0,333,0,105.6,0,20,Unsold/TBA
+player_369,Salman Nizar,-,Batsman,0.0,770,0,99.7,0,21,Unsold/TBA
+player_370,Aniket Verma,SRH,Batsman,30.0,1032,0,122.3,0,46,₹0-2 Cr
+player_371,Sumeet Verma,-,Batsman,0.0,518,0,108.6,0,28,Unsold/TBA
+player_372,Manan Vohra,-,Batsman,0.0,686,0,107.7,0,20,Unsold/TBA
+player_373,Samarth Vyas,-,Batsman,0.0,924,0,117.8,0,40,Unsold/TBA
+player_374,Raj Bawa,MI,All-rounder,30.0,436,9,112.1,6.91,17,₹0-2 Cr
+player_375,Emanjot Singh Chahal,-,All-rounder,0.0,275,18,86.7,7.32,9,Unsold/TBA
+player_376,Musheer Khan,PBKS,All-rounder,30.0,494,10,80.9,9.21,24,₹0-2 Cr
+player_377,Manvanth Kumar,DC,All-rounder,30.0,220,16,96.6,8.85,29,₹0-2 Cr
+player_378,Mayank Rawat,-,All-rounder,0.0,490,3,110.7,8.15,24,Unsold/TBA
+player_379,Suryansh Shedge,PBKS,All-rounder,30.0,196,11,105.7,8.46,25,₹0-2 Cr
+player_380,Hrithik Shokeen,-,All-rounder,0.0,240,20,85.0,7.11,34,Unsold/TBA
+player_381,Sonu Yadav,-,All-rounder,0.0,323,2,79.4,9.21,11,Unsold/TBA
+player_382,Rithik Easwaran,-,Batsman,0.0,598,0,109.3,0,26,Unsold/TBA
+player_383,Anmol Malhotra,-,Batsman,0.0,870,0,103.1,0,40,Unsold/TBA
+player_384,Pradosh Ranjan Paul,-,Batsman,0.0,864,0,99.4,0,35,Unsold/TBA
+player_385,Karteek Sharma,-,Batsman,0.0,528,0,114.3,0,49,Unsold/TBA
+player_386,Akash Singh,-,Batsman,0.0,418,0,102.1,0,13,Unsold/TBA
+player_387,Tejasvi Singh,-,Batsman,0.0,698,0,94.5,0,38,Unsold/TBA
+player_388,Siddarth Yadav,-,Batsman,0.0,920,0,94.5,0,17,Unsold/TBA
+player_389,Saurabh Dubey,-,Bowler,0.0,0,28,0,7.44,18,Unsold/TBA
+player_390,Aaqib Khan,-,Bowler,0.0,0,15,0,7.64,13,Unsold/TBA
+player_391,Kulwant Khejroliya,GT,Bowler,30.0,0,11,0,5.56,26,₹0-2 Cr
+player_392,Ankit Rajpoot,-,Bowler,0.0,0,14,0,5.72,20,Unsold/TBA
+player_393,Divesh Sharma,-,Bowler,0.0,0,30,0,8.68,37,Unsold/TBA
+player_394,Naman Tiwari,-,Bowler,0.0,0,13,0,6.36,13,Unsold/TBA
+player_395,Prince Yadav,LSG,Bowler,30.0,0,17,0,8.14,25,₹0-2 Cr
+player_396,Kunal Singh Chibb,-,Bowler,0.0,0,11,0,7.37,17,Unsold/TBA
+player_397,Yuvraj Chudasama,-,Bowler,0.0,0,10,0,6.48,21,Unsold/TBA
+player_398,Deepak Devadiga,-,Bowler,0.0,0,29,0,5.74,34,Unsold/TBA
+player_399,Ramesh Prasad,-,Bowler,0.0,0,20,0,6.66,10,Unsold/TBA
+player_400,Shivam Shukla,-,Bowler,0.0,0,17,0,8.28,32,Unsold/TBA
+player_401,Himanshu Singh,-,Bowler,0.0,0,12,0,6.4,40,Unsold/TBA
+player_402,Tejpreet Singh,-,Bowler,0.0,0,5,0,8.24,21,Unsold/TBA
+player_403,Qais Ahmad,-,All-rounder,0.0,388,2,90.2,8.68,10,Unsold/TBA
+player_404,Charith Asalanka,-,All-rounder,0.0,227,17,105.7,8.14,19,Unsold/TBA
+player_405,Michael Bracewell,-,All-rounder,0.0,173,19,98.6,7.2,18,Unsold/TBA
+player_406,Gudakesh Motie,-,All-rounder,0.0,110,12,83.7,8.93,28,Unsold/TBA
+player_407,Dan Mousley,-,All-rounder,0.0,274,19,97.7,7.09,14,Unsold/TBA
+player_408,Jamie Overton,CSK,All-rounder,150.0,325,33,92.8,8.29,32,₹0-2 Cr
+player_409,Dunith Wellalage,-,All-rounder,0.0,161,9,98.8,7.16,17,Unsold/TBA
+player_410,Ottneil Baartman,-,Bowler,0.0,0,8,0,6.69,28,Unsold/TBA
+player_411,Xavier Bartlett,PBKS,Bowler,80.0,0,28,0,6.45,34,₹0-2 Cr
+player_412,Dilshan Madushanka,-,Bowler,0.0,0,10,0,6.23,34,Unsold/TBA
+player_413,Adam Milne,-,Bowler,0.0,0,29,0,7.61,34,Unsold/TBA
+player_414,Lungi Ngidi,RCB,Bowler,100.0,0,42,0,8.45,48,₹0-2 Cr
+player_415,William O’Rourke,-,Bowler,0.0,0,30,0,7.96,23,Unsold/TBA
+player_416,Chetan Sakariya,-,Bowler,0.0,0,7,0,6.29,27,Unsold/TBA
+player_417,Sandeep Warrier,-,Bowler,0.0,0,7,0,5.88,24,Unsold/TBA
+player_418,Musaif Ajaz,-,Batsman,0.0,723,0,96.9,0,49,Unsold/TBA
+player_419,Agni Chopra,-,Batsman,0.0,685,0,92.3,0,30,Unsold/TBA
+player_420,Abhimanyu Easwaran,-,Batsman,0.0,507,0,111.2,0,20,Unsold/TBA
+player_421,Sudip Kumar Gharami,-,Batsman,0.0,500,0,111.7,0,30,Unsold/TBA
+player_422,Shubham Khajuria,-,Batsman,0.0,892,0,103.9,0,16,Unsold/TBA
+player_423,Akhil Rawat,-,Batsman,0.0,626,0,92.8,0,15,Unsold/TBA
+player_424,Prateek Yadav,-,Batsman,0.0,778,0,98.5,0,28,Unsold/TBA
+player_425,Abdul Basith,-,All-rounder,0.0,132,10,99.0,9.41,24,Unsold/TBA
+player_426,KC Cariappa,-,All-rounder,0.0,364,15,96.1,8.44,30,Unsold/TBA
+player_427,Yuvraj Chaudhary,LSG,All-rounder,0.0,440,16,90.1,8.59,10,Unsold/TBA
+player_428,Aman Khan,-,All-rounder,0.0,433,14,81.1,8.17,24,Unsold/TBA
+player_429,Sumit Kumar,-,All-rounder,0.0,376,12,101.3,7.2,36,Unsold/TBA
+player_430,Kamlesh Nagarkoti,CSK,All-rounder,30.0,392,22,94.9,9.23,32,₹0-2 Cr
+player_431,Hardik Raj,-,All-rounder,0.0,213,9,93.1,8.12,35,Unsold/TBA
+player_432,Harsh Tyagi,-,All-rounder,0.0,139,18,110.9,8.59,22,Unsold/TBA
+player_433,M Ajnas,-,Batsman,0.0,660,0,96.5,0,33,Unsold/TBA
+player_434,Unmukt Chand,-,Batsman,0.0,586,0,95.4,0,12,Unsold/TBA
+player_435,Tejasvi Dahiya,-,Batsman,0.0,894,0,99.4,0,28,Unsold/TBA
+player_436,Sumit Ghadigaonkar,-,Batsman,0.0,323,0,108.7,0,27,Unsold/TBA
+player_437,Baba Indrajith,-,Batsman,0.0,377,0,119.0,0,46,Unsold/TBA
+player_438,Muhammed Adnan Khan,-,Batsman,0.0,745,0,118.5,0,11,Unsold/TBA
+player_439,Bhagmender Lather,-,Batsman,0.0,960,0,91.2,0,36,Unsold/TBA
+player_440,Baltej Singh,-,Bowler,0.0,0,11,0,6.24,35,Unsold/TBA
+player_441,Ali Khan,-,Bowler,0.0,0,29,0,8.19,35,Unsold/TBA
+player_442,Ravi Kumar,-,Bowler,0.0,0,28,0,5.88,14,Unsold/TBA
+player_443,Vineet Panwar,-,Bowler,0.0,0,23,0,7.39,22,Unsold/TBA
+player_444,Vidyadhar Patil,-,Bowler,0.0,0,16,0,6.48,12,Unsold/TBA
+player_445,Aaradhya Shukla,-,Bowler,0.0,0,12,0,6.24,39,Unsold/TBA
+player_446,Abhinandan Singh,RCB,Bowler,30.0,0,29,0,6.87,36,₹0-2 Cr
+player_447,Cooper Connolly,-,All-rounder,0.0,329,14,83.8,6.53,34,Unsold/TBA
+player_448,Dushan Hemantha,-,All-rounder,0.0,170,19,114.3,7.03,28,Unsold/TBA
+player_449,Jason Holder,-,All-rounder,0.0,448,18,94.6,7.52,27,Unsold/TBA
+player_450,Karim Janat,GT,All-rounder,75.0,233,14,79.8,8.22,29,₹0-2 Cr
+player_451,James Neesham,-,All-rounder,0.0,130,2,80.8,9.17,34,Unsold/TBA
+player_452,Daniel Sams,-,All-rounder,0.0,423,2,76.7,9.06,28,Unsold/TBA
+player_453,Will Sutherland,-,All-rounder,0.0,284,9,100.0,9.81,24,Unsold/TBA
+player_454,Taskin Ahmed,-,Bowler,0.0,0,28,0,5.77,29,Unsold/TBA
+player_455,Ben Dwarshuis,-,Bowler,0.0,0,16,0,8.12,13,Unsold/TBA
+player_456,Obed McCoy,-,Bowler,0.0,0,9,0,8.93,30,Unsold/TBA
+player_457,Riley Meredith,-,Bowler,0.0,0,5,0,7.92,25,Unsold/TBA
+player_458,Lance Morris,-,Bowler,0.0,0,23,0,8.08,23,Unsold/TBA
+player_459,Olly Stone,-,Bowler,0.0,0,17,0,8.99,25,Unsold/TBA
+player_460,Daniel Worrall,-,Bowler,0.0,0,8,0,8.0,39,Unsold/TBA
+player_461,Pyla Avinash,PBKS,Batsman,30.0,876,0,121.1,0,41,₹0-2 Cr
+player_462,Kiran Chormale,-,Batsman,0.0,504,0,98.7,0,26,Unsold/TBA
+player_463,Ashish Dahariya,-,Batsman,0.0,521,0,115.5,0,24,Unsold/TBA
+player_464,Tushar Raheja,-,Batsman,0.0,699,0,118.5,0,32,Unsold/TBA
+player_465,Sarthak Ranjan,-,Batsman,0.0,875,0,109.0,0,31,Unsold/TBA
+player_466,Abhijeet Tomar,-,Batsman,0.0,529,0,104.0,0,20,Unsold/TBA
+player_467,Krish Bhagat,-,All-rounder,0.0,429,17,77.3,8.5,36,Unsold/TBA
+player_468,Sohraab Dhaliwal,-,All-rounder,0.0,268,6,101.4,8.26,18,Unsold/TBA
+player_469,Harsh Dubey,-,All-rounder,0.0,139,5,93.4,7.99,29,Unsold/TBA
+player_470,Ramakrishna Ghosh,CSK,All-rounder,30.0,290,16,93.9,8.86,28,₹0-2 Cr
+player_471,Raj Limbani,-,All-rounder,0.0,157,19,97.3,7.63,10,Unsold/TBA
+player_472,Ninad Rathva,-,All-rounder,0.0,105,20,113.5,7.97,11,Unsold/TBA
+player_473,Vivrant Sharma,-,All-rounder,0.0,343,9,80.7,7.49,21,Unsold/TBA
+player_474,Shiva Singh,-,All-rounder,0.0,274,4,108.2,6.76,27,Unsold/TBA
+player_475,Sayed Irfan Aftab,-,Bowler,0.0,0,10,0,6.79,17,Unsold/TBA
+player_476,Anirudh Chowdhary,-,Bowler,0.0,0,22,0,5.98,19,Unsold/TBA
+player_477,Siddarth Kaul,-,Bowler,0.0,0,9,0,8.01,11,Unsold/TBA
+player_478,Prashant Painkra,-,Bowler,0.0,0,24,0,7.82,11,Unsold/TBA
+player_479,Satyanarayana Raju,MI,Bowler,30.0,0,24,0,6.35,20,₹0-2 Cr
+player_480,Yeddala Reddy,-,Bowler,0.0,0,19,0,7.98,30,Unsold/TBA
+player_481,Zakary Foulkes,-,All-rounder,0.0,395,7,87.5,6.65,8,Unsold/TBA
+player_482,Chris Green,-,All-rounder,0.0,328,11,114.8,7.04,24,Unsold/TBA
+player_483,Shakib Al Hasan,-,All-rounder,0.0,282,11,75.8,6.99,35,Unsold/TBA
+player_484,Mehidy Hasan Miraz,-,All-rounder,0.0,305,9,114.4,7.33,25,Unsold/TBA
+player_485,Wiaan Mulder,-,All-rounder,0.0,485,16,76.0,6.91,9,Unsold/TBA
+player_486,Dwaine Pretorius,-,All-rounder,0.0,397,2,85.7,7.08,29,Unsold/TBA
+player_487,Dasun Shanaka,-,All-rounder,0.0,430,18,76.8,9.68,22,Unsold/TBA
+player_488,Shoriful Islam,-,Bowler,0.0,0,19,0,5.81,18,Unsold/TBA
+player_489,Blessing Muzarabani,-,Bowler,0.0,0,23,0,8.71,25,Unsold/TBA
+player_490,Matthew Potts,-,Bowler,0.0,0,6,0,6.29,37,Unsold/TBA
+player_491,Tanzim Hasan Sakib,-,Bowler,0.0,0,13,0,8.43,9,Unsold/TBA
+player_492,Ben Sears,-,Bowler,0.0,0,5,0,7.22,17,Unsold/TBA
+player_493,Tim Southee,-,Bowler,0.0,0,14,0,7.42,38,Unsold/TBA
+player_494,John Turner,-,Bowler,0.0,0,27,0,5.9,34,Unsold/TBA
+player_495,Joshua Brown,-,Batsman,0.0,551,0,101.2,0,31,Unsold/TBA
+player_496,Oliver Davies,-,Batsman,0.0,797,0,102.7,0,47,Unsold/TBA
+player_497,Bevon Jacobs,MI,Batsman,30.0,440,0,94.7,0,34,₹0-2 Cr
+player_498,Atharva Kale,-,Batsman,0.0,533,0,113.6,0,29,Unsold/TBA
+player_499,Abhishek Nair,-,Batsman,0.0,654,0,107.4,0,49,Unsold/TBA
+player_500,Vishwanath Singh,-,Batsman,0.0,982,0,93.8,0,26,Unsold/TBA
+player_501,Lone Nasir,-,All-rounder,0.0,303,8,99.8,8.15,17,Unsold/TBA
+player_502,Brandon McMullen,-,All-rounder,0.0,481,20,78.7,7.01,34,Unsold/TBA
+player_503,Sudhesan Midhun,-,All-rounder,0.0,460,15,96.0,7.57,32,Unsold/TBA
+player_504,Abid Mushtaq,-,All-rounder,0.0,164,19,108.8,8.27,8,Unsold/TBA
+player_505,Mahesh Pithiya,-,All-rounder,0.0,172,5,77.0,6.78,18,Unsold/TBA
+player_506,Maramreddy Reddy,-,All-rounder,0.0,451,5,94.6,7.74,15,Unsold/TBA
+player_507,Atit Sheth,-,All-rounder,0.0,147,6,106.6,8.08,25,Unsold/TBA
+player_508,Jonty Sidhu,-,All-rounder,0.0,431,14,103.8,9.9,24,Unsold/TBA
+player_509,Mohit Avasthi,-,Bowler,0.0,0,6,0,5.73,26,Unsold/TBA
+player_510,Faridoon Dawoodzai,-,Bowler,0.0,0,15,0,5.64,8,Unsold/TBA
+player_511,Praful Hinge,-,Bowler,0.0,0,21,0,7.88,15,Unsold/TBA
+player_512,Pankaj Jaswal,-,Bowler,0.0,0,15,0,7.74,35,Unsold/TBA
+player_513,Vijay Kumar,-,Bowler,0.0,0,9,0,5.72,35,Unsold/TBA
+player_514,Ashok Sharma,RR,Bowler,30.0,0,29,0,7.79,36,₹0-2 Cr
+player_515,Mujtaba Yousuf,-,Bowler,0.0,0,19,0,7.27,32,Unsold/TBA
+player_516,Ashton Agar,-,All-rounder,0.0,336,14,111.7,7.76,37,Unsold/TBA
+player_517,Roston Chase,-,All-rounder,0.0,409,16,112.9,7.26,33,Unsold/TBA
+player_518,Junior Dala,-,All-rounder,0.0,469,20,111.8,7.18,27,Unsold/TBA
+player_519,Mahedi Hasan,-,All-rounder,0.0,427,8,91.5,7.26,29,Unsold/TBA
+player_520,Nangeyalia Kharote,-,All-rounder,0.0,132,4,112.7,9.11,34,Unsold/TBA
+player_521,Dan Lawrence,-,All-rounder,0.0,450,12,87.5,9.3,29,Unsold/TBA
+player_522,Nathan Smith,-,All-rounder,0.0,445,2,94.2,7.67,15,Unsold/TBA
+player_523,James Anderson,-,Bowler,0.0,0,29,0,8.8,31,Unsold/TBA
+player_524,Kyle Jamieson,-,Bowler,0.0,0,28,0,8.63,15,Unsold/TBA
+player_525,Chris Jordan,-,Bowler,0.0,0,9,0,8.96,22,Unsold/TBA
+player_526,Hasan Mahmud,-,Bowler,0.0,0,17,0,7.78,21,Unsold/TBA
+player_527,Tymal Mills,-,Bowler,0.0,0,5,0,6.84,39,Unsold/TBA
+player_528,David Payne,-,Bowler,0.0,0,17,0,6.56,34,Unsold/TBA
+player_529,Nahid Rana,-,Bowler,0.0,0,28,0,8.67,35,Unsold/TBA
+player_530,Prayas Ray Barman,-,Batsman,0.0,443,0,104.9,0,10,Unsold/TBA
+player_531,Jafar Jamal,-,Batsman,0.0,696,0,113.5,0,38,Unsold/TBA
+player_532,Ayaz Khan,-,Batsman,0.0,396,0,104.3,0,19,Unsold/TBA
+player_533,Kaushik Maity,-,Batsman,0.0,1000,0,92.3,0,14,Unsold/TBA
+player_534,Rituraj Sharma,-,Batsman,0.0,970,0,98.2,0,38,Unsold/TBA
+player_535,Vaibhav Suryavanshi,RR,Batsman,110.00000000000001,725,0,118.0,0,66,₹0-2 Cr
+player_536,Kartik Chadha,-,All-rounder,0.0,230,20,101.7,9.23,18,Unsold/TBA
+player_537,Writtick Chatterjee,-,All-rounder,0.0,276,3,97.4,9.55,27,Unsold/TBA
+player_538,Prerit Dutta,-,All-rounder,0.0,297,16,80.5,8.62,13,Unsold/TBA
+player_539,Rajneesh Gurbani,-,All-rounder,0.0,348,19,111.5,9.57,35,Unsold/TBA
+player_540,Shubhang Hegde,-,All-rounder,0.0,269,4,75.0,7.34,16,Unsold/TBA
+player_541,Saransh Jain,-,All-rounder,0.0,254,16,109.8,9.15,12,Unsold/TBA
+player_542,Ripal Patel,-,All-rounder,0.0,398,19,84.9,8.36,25,Unsold/TBA
+player_543,Akash Vasisht,-,All-rounder,0.0,260,7,111.7,7.33,13,Unsold/TBA
+player_544,Anirudh Kanwar,-,Bowler,0.0,0,19,0,8.98,24,Unsold/TBA
+player_545,Shubham Kapse,-,Bowler,0.0,0,21,0,6.58,26,Unsold/TBA
+player_546,Atif Mushtaq,-,Bowler,0.0,0,21,0,6.28,28,Unsold/TBA
+player_547,Dipesh Parwani,-,Bowler,0.0,0,18,0,6.3,8,Unsold/TBA
+player_548,Manish Reddy,-,Bowler,0.0,0,27,0,6.01,23,Unsold/TBA
+player_549,Chetan Sharma,-,Bowler,0.0,0,12,0,8.41,18,Unsold/TBA
+player_550,Avinash Singh,-,Bowler,0.0,0,13,0,6.29,35,Unsold/TBA
+player_551,Alick Athanaze,-,All-rounder,0.0,159,19,92.1,7.28,25,Unsold/TBA
+player_552,Hilton Cartwright,-,All-rounder,0.0,417,16,89.6,6.86,37,Unsold/TBA
+player_553,Dominic Drakes,-,All-rounder,0.0,473,7,98.2,7.45,31,Unsold/TBA
+player_554,Daryn Dupavillon,-,Bowler,0.0,0,18,0,7.94,17,Unsold/TBA
+player_555,Matthew Forde,-,All-rounder,0.0,323,17,86.4,8.46,31,Unsold/TBA
+player_556,Patrick Kruger,-,All-rounder,0.0,373,14,88.5,6.78,15,Unsold/TBA
+player_557,Lahiru Kumara,-,Bowler,0.0,0,9,0,7.8,33,Unsold/TBA
+player_558,Michael Neser,-,All-rounder,0.0,401,16,106.0,7.0,25,Unsold/TBA
+player_559,Richard Ngarava,-,Bowler,0.0,0,10,0,6.77,19,Unsold/TBA
+player_560,Wayne Parnell,-,Bowler,0.0,0,30,0,6.73,33,Unsold/TBA
+player_561,Keemo Paul,-,All-rounder,0.0,171,2,102.2,7.04,35,Unsold/TBA
+player_562,Odean Smith,-,All-rounder,0.0,161,6,89.0,6.94,31,Unsold/TBA
+player_563,Andrew Tye,-,Bowler,0.0,0,20,0,6.79,12,Unsold/TBA
+player_564,Ajay Ahlawat,-,All-rounder,0.0,392,14,114.4,8.04,37,Unsold/TBA
+player_565,Corbin Bosch,-,All-rounder,0.0,291,7,81.6,8.95,31,Unsold/TBA
+player_566,Mayank Gusain,-,All-rounder,0.0,415,18,88.6,8.57,31,Unsold/TBA
+player_567,Mukhtar Hussain,-,All-rounder,0.0,136,10,94.7,9.43,11,Unsold/TBA
+player_568,Girinath Reddy,-,All-rounder,0.0,240,14,103.4,9.49,9,Unsold/TBA
+player_569,Jalaj Saxena,-,All-rounder,0.0,331,7,108.5,6.97,16,Unsold/TBA
+player_570,Yajas Sharma,-,All-rounder,0.0,269,3,100.7,7.37,24,Unsold/TBA
+player_571,Sanjay Yadav,-,All-rounder,0.0,465,20,91.9,9.04,34,Unsold/TBA
+player_572,Vishal Godara,-,Bowler,0.0,0,6,0,8.29,33,Unsold/TBA
+player_573,Eshan Malinga,SRH,Bowler,120.0,0,44,0,6.17,44,₹0-2 Cr
+player_574,Samarth Nagaraj,-,Bowler,0.0,0,20,0,6.72,9,Unsold/TBA
+player_575,Abhishek Saini,-,Bowler,0.0,0,8,0,6.73,33,Unsold/TBA
+player_576,Dumindu Sewmina,-,Bowler,0.0,0,11,0,8.38,21,Unsold/TBA
+player_577,Pradyuman Singh,-,Bowler,0.0,0,10,0,7.06,13,Unsold/TBA
+player_578,Vasu Vats,-,Bowler,0.0,0,27,0,7.92,21,Unsold/TBA
+player_579,Umang Kumar,-,All-rounder,0.0,248,14,98.1,9.34,32,Unsold/TBA
+player_580,Mohamed Ali,-,All-rounder,0.0,141,2,88.8,7.28,12,Unsold/TBA
+player_581,Atharva Ankolekar,-,All-rounder,0.0,312,2,85.5,8.86,27,Unsold/TBA
+player_582,Vaisakh Chandran,-,All-rounder,0.0,362,8,82.1,8.88,28,Unsold/TBA
+player_583,Auqib Nabi,-,All-rounder,0.0,487,2,114.9,7.25,15,Unsold/TBA
+player_584,Rohit Rayudu,-,All-rounder,0.0,284,4,96.2,9.49,17,Unsold/TBA
+player_585,Uday Saharan,-,All-rounder,0.0,138,2,90.4,7.2,8,Unsold/TBA
+player_586,Ayush Vartak,-,All-rounder,0.0,205,11,85.7,9.84,32,Unsold/TBA
+player_587,Baba Aparajith,-,All-rounder,0.0,334,19,87.0,9.94,12,Unsold/TBA
+player_588,Sumit Beniwal,-,All-rounder,0.0,131,19,107.9,6.54,36,Unsold/TBA
+player_589,Nishunk Birla,-,All-rounder,0.0,262,7,76.5,6.63,18,Unsold/TBA
+player_590,Digvijay Deshmukh,-,All-rounder,0.0,440,20,78.9,7.14,29,Unsold/TBA
+player_591,Lakshay Jain,-,All-rounder,0.0,153,14,80.0,8.43,14,Unsold/TBA
+player_592,Duan Jansen,-,All-rounder,0.0,386,20,100.4,8.04,37,Unsold/TBA
+player_593,Kritagya Singh,-,All-rounder,0.0,220,16,81.7,9.48,31,Unsold/TBA
+player_594,P Vignesh,-,All-rounder,0.0,253,17,114.3,7.7,16,Unsold/TBA
+player_595,Sabhay Chadha,-,All-rounder,0.0,263,20,83.0,8.23,24,Unsold/TBA
+player_596,Benny Howell,-,All-rounder,0.0,277,15,82.5,9.47,20,Unsold/TBA
+player_597,Hemanth Kumar,-,All-rounder,0.0,247,12,84.1,7.09,23,Unsold/TBA
+player_598,Rohan Rana,-,All-rounder,0.0,497,17,94.1,7.19,25,Unsold/TBA
+player_599,Bharat Sharma,-,All-rounder,0.0,314,8,100.0,7.87,35,Unsold/TBA
+player_600,Pratham Singh,-,All-rounder,0.0,438,5,108.5,8.54,12,Unsold/TBA
+player_601,Tripurana Vijay,DC,All-rounder,30.0,350,13,115.9,7.2,27,₹0-2 Cr
+player_602,Ravi Kumar Yadav,-,All-rounder,0.0,337,6,90.6,9.55,12,Unsold/TBA
+player_603,Arjun Azad,-,All-rounder,0.0,244,6,90.7,8.94,38,Unsold/TBA
+player_604,Abhay Choudhary,-,All-rounder,0.0,373,8,102.2,9.3,9,Unsold/TBA
+player_605,Gaurav Gambhir,-,All-rounder,0.0,157,10,80.4,9.67,24,Unsold/TBA
+player_606,Shubham Garhwal,-,All-rounder,0.0,103,5,78.2,7.94,38,Unsold/TBA
+player_607,Tejasvi Jaiswal,-,All-rounder,0.0,478,11,104.9,7.21,21,Unsold/TBA
+player_608,Sairaj Patil,-,All-rounder,0.0,171,16,82.1,9.03,8,Unsold/TBA
+player_609,Madhav Tiwari,DC,All-rounder,40.0,527,10,117.3,8.92,15,₹0-2 Cr
+player_610,Kamal Tripathi,-,All-rounder,0.0,366,12,85.4,7.35,36,Unsold/TBA
+player_611,Prashant Chauhan,-,All-rounder,0.0,416,3,80.0,9.79,36,Unsold/TBA
+player_612,Yash Dabas,-,All-rounder,0.0,144,10,80.6,8.92,35,Unsold/TBA
+player_613,Dhruv Kaushik,-,All-rounder,0.0,438,18,98.5,7.97,32,Unsold/TBA
+player_614,Khrievitso Kense,-,All-rounder,0.0,352,18,92.8,7.67,38,Unsold/TBA
+player_615,Akash Parkar,-,All-rounder,0.0,262,9,78.0,7.55,31,Unsold/TBA
+player_616,Vignesh Puthur,MI,All-rounder,30.0,468,5,78.2,9.37,13,₹0-2 Cr
+player_617,Tripuresh Singh,-,All-rounder,0.0,413,13,77.5,7.62,15,Unsold/TBA
+player_618,Vijay Yadav,-,All-rounder,0.0,315,2,107.3,7.18,29,Unsold/TBA
+player_619,Jofra Archer,RR,Bowler,1250.0,0,216,0,8.35,176,₹10-15 Cr
+player_620,Saurabh Netravalkar,-,Bowler,0.0,0,21,0,6.05,21,Unsold/TBA
+player_621,Hardik Tamore,-,Wicket-keeper,0.0,737,0,110.3,0,10,Unsold/TBA
+player_622,Daryl Mitchell,-,All-rounder,0.0,443,5,111.1,9.44,25,Unsold/TBA

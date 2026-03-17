@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IPL 2025 Auction Dashboard - Hadoop/Spark Processed</title>
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --secondary-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --success-green: #10b981;
+            --warning-yellow: #f59e0b;
+            --danger-red: #ef4444;
+            --dark-bg: #0a1628;
+            --card-bg: #1a2b3c;
+            --border-color: #38bdf8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a2b3c 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-cyan));
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(30, 64, 175, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card {
+            background: rgba(26, 43, 60, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card h2 {
+            color: var(--secondary-cyan);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .stat-card {
+            background: rgba(59, 130, 246, 0.25);
+            border: 1px solid rgba(59, 130, 248, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card .value {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--secondary-cyan);
+        }
+        
+        .filter-group select, .filter-group input {
+            padding: 12px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .filter-group select:focus, .filter-group input:focus {
+            outline: none;
+            border-color: var(--secondary-cyan);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        th {
+            background: rgba(56, 189, 248, 0.25);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--secondary-cyan);
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+        }
+        
+        tr:hover {
+            background: rgba(56, 189, 248, 0.1);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-add {
+            background: linear-gradient(135deg, var(--primary-blue), #2563eb);
+            color: white;
+        }
+        
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+        }
+        
+        .btn-add:disabled {
+            background: #4b5563;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-remove {
+            background: linear-gradient(135deg, var(--danger-red), #dc2626);
+            color: white;
+            padding: 6px 12px;
+        }
+        
+        .btn-remove:hover {
+            transform: scale(1.1);
+        }
+        
+        .budget-tag {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .range-15plus { background: linear-gradient(135deg, var(--accent-purple), #7c3aed); }
+        .range-10-15 { background: linear-gradient(135deg, var(--primary-blue), #2563eb); }
+        .range-5-10 { background: linear-gradient(135deg, var(--secondary-cyan), #0891b2); }
+        .range-2-5 { background: linear-gradient(135deg, var(--success-green), #059669); }
+        .range-0-2 { background: linear-gradient(135deg, var(--warning-yellow), #d97706); }
+        .range-unsold { background: linear-gradient(135deg, #6b7280, #4b5563); }
+        
+        .progress-container {
+            margin: 15px 0;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+        
+        .player-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.7);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .player-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary-cyan);
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .player-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .player-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .player-meta {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+        
+        .player-price {
+            color: var(--secondary-cyan);
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #9ca3af;
+        }
+        
+        .results-count {
+            text-align: center;
+            color: #9ca3af;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏏 IPL 2025 AUCTION DASHBOARD</h1>
+            <p>622 REAL PLAYERS • HADOOP/SPARK PROCESSED • 120 CRORE BUDGET</p>
+            <div class="stats-container">
+                <div class="stat-item">📊 <span id="totalPlayers">622</span> Players</div>
+                <div class="stat-item">💰 ₹<span id="totalBudget">120</span> Cr Budget</div>
+                <div class="stat-item">⚡ Hadoop Processed</div>
+                <div class="stat-item">🔥 Spark Analytics</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 SMART TEAM BUILDER - 120 CRORE BUDGET</h2>
+            <div class="stats-grid" id="teamStats">
+                <div class="stat-card">
+                    <div class="value">0/25</div>
+                    <div class="label">Players Selected</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">₹120.00 Cr</div>
+                    <div class="label">Remaining Budget</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">25</div>
+                    <div class="label">Slots to Fill</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">0</div>
+                    <div class="label">Batsmen</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">0</div>
+                    <div class="label">Bowlers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">0</div>
+                    <div class="label">All-rounders</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Budget Utilization</span>
+                    <span id="budgetPercentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%; background: linear-gradient(90deg, var(--secondary-cyan), var(--primary-blue));"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 PLAYER DATABASE - ALL 622 REAL PLAYERS FROM AUCTION</h2>
+            
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label>🔍 Search Players:</label>
+                    <input type="text" id="searchInput" placeholder="Search by name or team..." />
+                </div>
+                <div class="filter-group">
+                    <label>🏆 Filter by Team:</label>
+                    <select id="teamFilter">
+                        <option value="all">All Teams</option>
+                        <option value="RCB">RCB</option>
+                        <option value="MI">MI</option>
+                        <option value="CSK">CSK</option>
+                        <option value="KKR">KKR</option>
+                        <option value="SRH">SRH</option>
+                        <option value="GT">GT</option>
+                        <option value="LSG">LSG</option>
+                        <option value="RR">RR</option>
+                        <option value="DC">DC</option>
+                        <option value="PBKS">PBKS</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>🏏 Filter by Role:</label>
+                    <select id="roleFilter">
+                        <option value="all">All Roles</option>
+                        <option value="Batsman">Batsman</option>
+                        <option value="Bowler">Bowler</option>
+                        <option value="All-rounder">All-rounder</option>
+                        <option value="Wicket-keeper">Wicket-keeper</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>💰 Filter by Budget Range:</label>
+                    <select id="budgetFilter">
+                        <option value="all">All Budget Ranges</option>
+                        <option value="₹15+ Cr">₹15+ Cr</option>
+                        <option value="₹10-15 Cr">₹10-15 Cr</option>
+                        <option value="₹5-10 Cr">₹5-10 Cr</option>
+                        <option value="₹2-5 Cr">₹2-5 Cr</option>
+                        <option value="₹0-2 Cr">₹0-2 Cr</option>
+                        <option value="Unsold/TBA">Unsold/TBA</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table id="playersTable">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Team</th>
+                            <th>Role</th>
+                            <th>Performance</th>
+                            <th>Price</th>
+                            <th>Budget Range</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="playersBody">
+                        <tr>
+                            <td colspan="7" class="loading">Loading 622 players from Hadoop-processed ipl_2025_auction_players.csv...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="results-count" id="resultsCount">
+                Loading all 622 players from auction data...
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🛠 YOUR SELECTED TEAM (<span id="selectedCount">0</span>/25)</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="value" style="color: var(--primary-blue);" id="selectedBatsmen">0</div>
+                    <div class="label">Batsmen</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" style="color: var(--success-green);" id="selectedBowlers">0</div>
+                    <div class="label">Bowlers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" style="color: var(--warning-yellow);" id="selectedAllrounders">0</div>
+                    <div class="label">All-rounders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" style="color: var(--accent-purple);" id="selectedKeepers">0</div>
+                    <div class="label">Keepers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" style="color: var(--secondary-cyan);" id="budgetSpent">₹0.00 Cr</div>
+                    <div class="label">Spent</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%; background: linear-gradient(90deg, var(--secondary-cyan), var(--primary-blue));"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" style="color: var(--success-green);" id="budgetRemaining">₹120.00 Cr</div>
+                    <div class="label">Remaining</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, var(--success-green), #059669);"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="selectedPlayers">
+                <p style="text-align: center; color: #9ca3af;">No players selected yet. Click "Add to Team" to build your squad with real auction players.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class HadoopIPLDashboard {
+            constructor() {
+                this.players = [];
+                this.selectedPlayers = [];
+                this.budget = 12000; // 120 Crore
+                this.remainingBudget = 12000;
+                this.init();
+            }
+
+            async init() {
+                console.log("🚀 Initializing Hadoop-processed IPL Dashboard...");
+                await this.loadPlayersData();
+                this.setupEventListeners();
+                this.render();
+                console.log("✅ Dashboard initialized with Hadoop/Spark processed data!");
+            }
+
+            async loadPlayersData() {
+                try {
+                    // Load from Hadoop-processed data
+                    console.log("🔄 Loading data from Hadoop-processed dashboard_players.json...");
+                    const response = await fetch('dashboard_players.json');
+                    this.players = await response.json();
+                    console.log(`✅ Loaded ${this.players.length} players from Hadoop-processed ipl_2025_auction_players.csv`);
+                } catch (error) {
+                    console.error('❌ Error loading Hadoop player data:', error);
+                    // Fallback to display error
+                    this.players = [];
+                    document.getElementById('playersBody').innerHTML = 
+                        '<tr><td colspan="7" class="loading" style="color: #ef4444;">❌ Error: Could not load Hadoop-processed player data</td></tr>';
+                }
+            }
+
+            setupEventListeners() {
+                let searchTimeout;
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        this.renderPlayersTable();
+                    }, 300);
+                });
+
+                ['teamFilter', 'roleFilter', 'budgetFilter'].forEach(id => {
+                    document.getElementById(id).addEventListener('change', () => {
+                        this.renderPlayersTable();
+                    });
+                });
+            }
+
+            getFilteredPlayers() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const teamFilter = document.getElementById('teamFilter').value;
+                const roleFilter = document.getElementById('roleFilter').value;
+                const budgetFilter = document.getElementById('budgetFilter').value;
+
+                return this.players.filter(player => {
+                    const matchesSearch = player.name.toLowerCase().includes(searchTerm) || 
+                                        player.team.toLowerCase().includes(searchTerm);
+                    const matchesTeam = teamFilter === 'all' || player.team === teamFilter;
+                    const matchesRole = roleFilter === 'all' || player.role === roleFilter;
+                    const matchesBudget = budgetFilter === 'all' || player.budget_range === budgetFilter;
+
+                    return matchesSearch && matchesTeam && matchesRole && matchesBudget;
+                });
+            }
+
+            addToTeam(playerId) {
+                const player = this.players.find(p => p.id === playerId);
+                if (player && this.remainingBudget >= player.price && this.selectedPlayers.length < 25) {
+                    this.selectedPlayers.push(player);
+                    this.remainingBudget -= player.price;
+                    this.render();
+                }
+            }
+
+            removeFromTeam(playerId) {
+                const playerIndex = this.selectedPlayers.findIndex(p => p.id === playerId);
+                if (playerIndex > -1) {
+                    const player = this.selectedPlayers[playerIndex];
+                    this.selectedPlayers.splice(playerIndex, 1);
+                    this.remainingBudget += player.price;
+                    this.render();
+                }
+            }
+
+            render() {
+                this.renderTeamStats();
+                this.renderPlayersTable();
+                this.renderSelectedPlayers();
+            }
+
+            renderTeamStats() {
+                const batsmen = this.selectedPlayers.filter(p => p.role === 'Batsman' || p.role === 'Wicket-keeper').length;
+                const bowlers = this.selectedPlayers.filter(p => p.role === 'Bowler').length;
+                const allrounders = this.selectedPlayers.filter(p => p.role === 'All-rounder').length;
+                const totalSpent = this.selectedPlayers.reduce((sum, p) => sum + p.price, 0);
+                const budgetUtilization = (totalSpent / this.budget) * 100;
+                
+                document.getElementById('teamStats').innerHTML = `
+                    <div class="stat-card">
+                        <div class="value">${this.selectedPlayers.length}/25</div>
+                        <div class="label">Players Selected</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value">₹${(this.remainingBudget / 100).toFixed(2)} Cr</div>
+                        <div class="label">Remaining Budget</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value">${25 - this.selectedPlayers.length}</div>
+                        <div class="label">Slots to Fill</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value">${batsmen}</div>
+                        <div class="label">Batsmen</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value">${bowlers}</div>
+                        <div class="label">Bowlers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value">${allrounders}</div>
+                        <div class="label">All-rounders</div>
+                    </div>
+                `;
+                
+                // Update progress bar
+                document.querySelector('.progress-fill[style*="secondary-cyan"]').style.width = `${budgetUtilization}%`;
+                document.getElementById('budgetPercentage').textContent = `${budgetUtilization.toFixed(1)}%`;
+            }
+
+            renderPlayersTable() {
+                const tbody = document.getElementById('playersBody');
+                const filteredPlayers = this.getFilteredPlayers();
+                
+                if (filteredPlayers.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="loading">No players found matching your criteria</td></tr>';
+                    document.getElementById('resultsCount').textContent = '0 players found';
+                    return;
+                }
+                
+                tbody.innerHTML = filteredPlayers.map(player => `
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div class="player-avatar">${player.name.charAt(0)}</div>
+                                <div class="player-details">
+                                    <div class="player-name">${player.name}</div>
+                                    <div class="player-meta">${player.team} • ${player.budget_range}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="color: var(--secondary-cyan); font-weight: 600;">${player.team}</td>
+                        <td>${player.role}</td>
+                        <td>
+                            <div style="font-size: 12px;">
+                                ${player.runs > 0 ? `<div>Runs: ${player.runs.toLocaleString()} (SR: ${player.strike_rate})</div>` : ''}
+                                ${player.wickets > 0 ? `<div>Wickets: ${player.wickets} (Eco: ${player.economy})</div>` : ''}
+                                <div style="color: #9ca3af;">Matches: ${player.matches}</div>
+                            </div>
+                        </td>
+                        <td style="font-weight: 600;">₹${(player.price / 100).toFixed(2)} Cr</td>
+                        <td>
+                            <span class="budget-tag ${
+                                player.budget_range === '₹15+ Cr' ? 'range-15plus' :
+                                player.budget_range === '₹10-15 Cr' ? 'range-10-15' :
+                                player.budget_range === '₹5-10 Cr' ? 'range-5-10' :
+                                player.budget_range === '₹2-5 Cr' ? 'range-2-5' :
+                                player.budget_range === '₹0-2 Cr' ? 'range-0-2' : 'range-unsold'
+                            }">${player.budget_range}</span>
+                        </td>
+                        <td>
+                            <button onclick="dashboard.addToTeam('${player.id}')" 
+                                    ${this.remainingBudget < player.price || this.selectedPlayers.length >= 25 ? 'disabled' : ''}
+                                    class="btn ${this.remainingBudget < player.price || this.selectedPlayers.length >= 25 ? '' : 'btn-add'}">
+                                ${this.selectedPlayers.length >= 25 ? 'Team Full' : 'Add to Team'}
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                document.getElementById('resultsCount').textContent = 
+                    `Showing ${filteredPlayers.length} of ${this.players.length} players from Hadoop-processed auction data`;
+            }
+
+            renderSelectedPlayers() {
+                const container = document.getElementById('selectedPlayers');
+                document.getElementById('selectedCount').textContent = this.selectedPlayers.length;
+                
+                // Update role counts
+                const batsmen = this.selectedPlayers.filter(p => p.role === 'Batsman' || p.role === 'Wicket-keeper').length;
+                const bowlers = this.selectedPlayers.filter(p => p.role === 'Bowler').length;
+                const allrounders = this.selectedPlayers.filter(p => p.role === 'All-rounder').length;
+                const keepers = this.selectedPlayers.filter(p => p.role === 'Wicket-keeper').length;
+                const totalSpent = this.selectedPlayers.reduce((sum, p) => sum + p.price, 0);
+                const budgetUtilization = (totalSpent / this.budget) * 100;
+                
+                document.getElementById('selectedBatsmen').textContent = batsmen;
+                document.getElementById('selectedBowlers').textContent = bowlers;
+                document.getElementById('selectedAllrounders').textContent = allrounders;
+                document.getElementById('selectedKeepers').textContent = keepers;
+                document.getElementById('budgetSpent').textContent = `₹${(totalSpent / 100).toFixed(2)} Cr`;
+                document.getElementById('budgetRemaining').textContent = `₹${(this.remainingBudget / 100).toFixed(2)} Cr`;
+                
+                // Update progress bars
+                document.querySelectorAll('.progress-fill[style*="secondary-cyan"]')[1].style.width = `${budgetUtilization}%`;
+                document.querySelector('.progress-fill[style*="success-green"]').style.width = `${100 - budgetUtilization}%`;
+                
+                if (this.selectedPlayers.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #9ca3af;">No players selected yet. Click "Add to Team" to build your squad with real auction players.</p>';
+                    return;
+                }
+                
+                container.innerHTML = `
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        ${this.selectedPlayers.map(player => `
+                            <div class="player-card">
+                                <div class="player-info">
+                                    <div class="player-avatar">${player.name.charAt(0)}</div>
+                                    <div class="player-details">
+                                        <div class="player-name">${player.name}</div>
+                                        <div class="player-meta">${player.team} • ${player.role} • ${player.budget_range}</div>
+                                        <div style="font-size: 12px; color: #9ca3af; margin-top: 3px;">
+                                            ${player.runs > 0 ? `Runs: ${player.runs.toLocaleString()} (SR: ${player.strike_rate})` : ''}
+                                            ${player.wickets > 0 ? ` | Wickets: ${player.wickets} (Eco: ${player.economy})` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div class="player-price">₹${(player.price / 100).toFixed(2)} Cr</div>
+                                    <button onclick="dashboard.removeFromTeam('${player.id}')" class="btn btn-remove">×</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize dashboard
+        const dashboard = new HadoopIPLDashboard();
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "table": "ball_by_ball",
+  "description": "Ball-by-ball delivery data",
+  "primary_key": ["ID", "Innings", "Overs", "BallNumber"],
+  "columns": {
+    "ID": {"type": "integer", "nullable": false},
+    "Innings": {"type": "integer", "nullable": false},
+    "Overs": {"type": "integer", "nullable": false},
+    "BallNumber": {"type": "integer", "nullable": false},
+    "Batter": {"type": "string", "nullable": false},
+    "Bowler": {"type": "string", "nullable": false},
+    "NonStriker": {"type": "string", "nullable": true},
+    "ExtraType": {"type": "string", "nullable": true},
+    "BatsmanRun": {"type": "integer", "nullable": false},
+    "ExtrasRun": {"type": "integer", "nullable": true},
+    "TotalRun": {"type": "integer", "nullable": false},
+    "IsWicketDelivery": {"type": "integer", "nullable": true},
+    "PlayerOut": {"type": "string", "nullable": true},
+    "Kind": {"type": "string", "nullable": true},
+    "FieldersInvolved": {"type": "string", "nullable": true},
+    "BattingTeam": {"type": "string", "nullable": false}
+  },
+  "required_columns": ["ID", "Innings", "Overs", "BallNumber", "Batter", "Bowler", "BatsmanRun", "TotalRun", "BattingTeam"]
+}
