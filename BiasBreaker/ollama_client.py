@@ -12,8 +12,8 @@ OLLAMA_URL = "http://localhost:11434/api/generate"
 OLLAMA_MODEL = "llama3"
 
 
-def _call_ollama(prompt: str, timeout: int = 8) -> str | None:
-    """Returns generated text or None if Ollama is unreachable."""
+def _call_ollama(prompt: str, timeout: int = 5) -> str | None:
+    """Returns generated text or None if Ollama is unreachable. Default 5s timeout."""
     try:
         resp = requests.post(
             OLLAMA_URL,
@@ -30,7 +30,7 @@ def _call_ollama(prompt: str, timeout: int = 8) -> str | None:
 def get_ai_whisper_llm(row: dict, shap_lines: list[str]) -> str | None:
     """
     Ask Ollama to rephrase the SHAP analysis into an engaging,
-    character-style 'AI Mentor' speech.
+    character-style 'AI Mentor' speech. (5s timeout)
     """
     shap_summary = "\n".join(shap_lines) if shap_lines else "No strong SHAP signals."
     prompt = (
@@ -47,14 +47,13 @@ def get_ai_whisper_llm(row: dict, shap_lines: list[str]) -> str | None:
         f"Key AI signals:\n{shap_summary}\n"
         "Give your verdict as the AI Mentor character."
     )
-    return _call_ollama(prompt)
+    return _call_ollama(prompt, timeout=5)
 
 
 def get_post_decision_feedback(action: str, correct: bool, row: dict) -> str | None:
     """
     After the player decides, Ollama generates a short post-decision
-    narrative comment — win or lose.
-    Kept short (4s timeout) so it never blocks the UI rerun.
+    narrative comment — win or lose. (4s timeout)
     """
     result = "correct" if correct else "incorrect"
     prompt = (
@@ -70,7 +69,7 @@ def get_post_decision_feedback(action: str, correct: bool, row: dict) -> str | N
 
 def ollama_feedback(row: dict, decision: str) -> str | None:
     """
-    Specifically analyzes the decision for potential bias using Ollama.
+    Specifically analyzes the decision for potential bias using Ollama. (4s timeout)
     """
     gap_years = row.get("gap_years", 0)
     gap_reason = row.get("gap_reason", "No gap")
@@ -83,21 +82,21 @@ def ollama_feedback(row: dict, decision: str) -> str | None:
         "If they rejected a candidate with a reasonable gap (like parental leave), mention it. "
         "Make it sound like a mentor guiding the player. Do NOT use markdown."
     )
-    return _call_ollama(prompt, timeout=5)
+    return _call_ollama(prompt, timeout=4)
 
 
 @st.cache_data(ttl=60)
 def ollama_available() -> bool:
     """Cached for 60s — avoids pinging Ollama on every Streamlit rerun."""
     try:
-        r = requests.get("http://localhost:11434/", timeout=2)
+        r = requests.get("http://localhost:11434/", timeout=1.5)
         return r.status_code == 200
     except Exception:
         return False
 
 def ollama_career_coach(strengths: str, weaknesses: str, bias_status: str, score: int) -> str | None:
     """
-    Called at game over. Acts as an AI Career Coach analyzing the player's performance.
+    Called at game over. Acts as an AI Career Coach analyzing the player's performance. (8s timeout)
     """
     prompt = (
         "You are an AI Career Coach analyzing an HR manager's performance in a hiring simulation game. "
@@ -109,4 +108,5 @@ def ollama_career_coach(strengths: str, weaknesses: str, bias_status: str, score
         "Give them a personalized piece of advice to improve their evaluation skills or overcome their bias for the next rounds. "
         "Do not use markdown. Do not start with 'I'. "
     )
-    return _call_ollama(prompt, timeout=10)
+    return _call_ollama(prompt, timeout=8)
+

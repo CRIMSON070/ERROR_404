@@ -6,6 +6,8 @@ Run:  streamlit run app.py
 import streamlit as st
 import streamlit.components.v1 as components
 import random
+import threading
+import time
 
 from data_engine import (
     pick_name, pick_skills, EDUCATION_MAP, POSITIVE_GAPS, generate_resumes, make_boss_resume
@@ -737,7 +739,9 @@ def render_ai_panel(whisper: dict, llm_text: str | None = None):
     col = "#22c55e" if prob >= 0.55 else "#ef4444" if prob < 0.45 else "#a855f7"
 
     body_html = ""
-    if llm_text:
+    if llm_text == "ANALYZING...":
+        body_html = f'<div class="ai-line" style="color:var(--purple);font-style:italic;margin-bottom:10px;animation:pulse 1.5s infinite;">⚡ AI is channeling wisdom...</div>'
+    elif llm_text:
         body_html = f'<div class="ai-line" style="color:#e0d8f0;font-style:italic;margin-bottom:10px;">" {llm_text} "</div>'
     for ln in lines:
         body_html += f'<div class="ai-line">{ln}</div>'
@@ -1017,12 +1021,27 @@ def render_result(res: dict, row: dict):
 
     # ── Ollama LLM Feedback (lazy-loaded) ────────────────────
     if not res.get("_llm_loaded") and ollama_available() and action != "skip":
-        fb = ollama_feedback(row, action)
-        res["llm_feedback"] = fb
-        res["_llm_loaded"]  = True
+        if res.get("llm_feedback") is None:
+            res["llm_feedback"] = "ANALYZING..."
+            
+            def fetch_feedback():
+                try:
+                    fb = ollama_feedback(row, action)
+                    res["llm_feedback"] = fb
+                    res["_llm_loaded"]  = True
+                except:
+                    res["llm_feedback"] = None
+            
+            threading.Thread(target=fetch_feedback, daemon=True).start()
 
     llm_feedback = res.get("llm_feedback")
-    if llm_feedback:
+    if llm_feedback == "ANALYZING...":
+        st.markdown(
+            f'<div style="margin-top:8px;font-size:12px;color:var(--muted);'
+            f'font-style:italic;animation:pulse 1.5s infinite;">🤖 AI is drafting feedback...</div>',
+            unsafe_allow_html=True,
+        )
+    elif llm_feedback:
         st.markdown(
             f'<div style="margin-top:8px;font-size:13px;color:#b0a8cc;'
             f'font-style:italic;">🤖 {llm_feedback}</div>',
@@ -1297,10 +1316,18 @@ def run_game(model, explainer):
                 st.session_state.score   += -3
                 st.session_state.hint_shown = True
                 st.session_state["_hint_used_this_round"] = True
-                # Try Ollama
+                # Non-blocking threaded Ollama call
                 if ollama_available():
-                    llm_txt = get_ai_whisper_llm(row, whisper.get("lines", []))
-                    st.session_state["_llm_whisper"] = llm_txt
+                    st.session_state["_llm_whisper"] = "ANALYZING..."
+                    
+                    def fetch_whisper():
+                        try:
+                            txt = get_ai_whisper_llm(row, whisper.get("lines", []))
+                            st.session_state["_llm_whisper"] = txt
+                        except:
+                            st.session_state["_llm_whisper"] = None
+
+                    threading.Thread(target=fetch_whisper, daemon=True).start()
                 else:
                     st.session_state["_llm_whisper"] = None
                 st.rerun()
@@ -1402,72 +1429,6 @@ def run_game(model, explainer):
 #  ENTRY POINT
 # ══════════════════════════════════════════════════════════
 def main():
-    # --- CURSOR TRAIL & 3D JS INJECTION ---
-    components.html("""
-    <script>
-        const targetDoc = window.parent.document;
-        if (!targetDoc.getElementById("cursor-trail-script")) {
-            const script = targetDoc.createElement("script");
-            script.id = "cursor-trail-script";
-            script.innerHTML = `
-                const trailContainer = document.createElement("div");
-                trailContainer.style.position = "fixed";
-                trailContainer.style.pointerEvents = "none";
-                trailContainer.style.zIndex = "999999";
-                trailContainer.style.top = "0";
-                trailContainer.style.left = "0";
-                trailContainer.style.width = "100%";
-                trailContainer.style.height = "100%";
-                document.body.appendChild(trailContainer);
-
-                const dots = [];
-                for (let i = 0; i < 20; i++) {
-                    let dot = document.createElement("div");
-                    dot.style.position = "absolute";
-                    let size = (20 - i);
-                    dot.style.width = size + "px";
-                    dot.style.height = size + "px";
-                    dot.style.background = i < 5 ? "radial-gradient(circle, rgba(245,197,24,0.9) 0%, rgba(245,197,24,0) 70%)" : "radial-gradient(circle, rgba(168,85,247,0.7) 0%, rgba(56,189,248,0) 80%)";
-                    dot.style.borderRadius = "50%";
-                    dot.style.transform = "translate(-50%, -50%)";
-                    dot.style.mixBlendMode = "screen";
-                    
-                    // Box shadow for extra glow
-                    if (i === 0) dot.style.boxShadow = "0 0 10px rgba(245,197,24,1), 0 0 20px rgba(168,85,247,1)";
-                    
-                    trailContainer.appendChild(dot);
-                    dots.push({ x: window.innerWidth/2, y: window.innerHeight/2, el: dot });
-                }
-
-                let msX = window.innerWidth / 2;
-                let msY = window.innerHeight / 2;
-
-                document.addEventListener("mousemove", (e) => {
-                    msX = e.clientX;
-                    msY = e.clientY;
-                });
-
-                function animate() {
-                    let x = msX;
-                    let y = msY;
-                    dots.forEach((dot, index) => {
-                        let nextDot = dots[index + 1] || dots[0];
-                        dot.x = x;
-                        dot.y = y;
-                        dot.el.style.left = dot.x + "px";
-                        dot.el.style.top = dot.y + "px";
-                        x += (nextDot.x - dot.x) * (0.45);
-                        y += (nextDot.y - dot.y) * (0.45);
-                    });
-                    requestAnimationFrame(animate);
-                }
-                animate();
-            `;
-            targetDoc.body.appendChild(script);
-        }
-    </script>
-    """, height=0, width=0)
-
     init_state()
     render_sidebar()
     model, explainer, acc = train_model()
@@ -1481,12 +1442,15 @@ def main():
         
     # Active learning check before round starts
     if st.session_state.get("_needs_retrain", False) and len(st.session_state.decision_log) >= 3:
-        st.toast("🧠 AI is learning from your decisions!", icon="🧠")
-        # Retrain model using decisions log + small slice of base dataframe if possible, but here we just use the decisions + synthetic
-        res = retrain_with_decisions(st.session_state.decision_log)
-        if res:
-            st.session_state["active_model"] = res[0]
-            st.session_state["active_explainer"] = res[1]
+        with st.status("🧠 AI is learning from your decisions...", expanded=False) as status:
+            time.sleep(0.5) # Narrative pause for effect
+            res = retrain_with_decisions(st.session_state.decision_log)
+            if res:
+                st.session_state["active_model"] = res[0]
+                st.session_state["active_explainer"] = res[1]
+                status.update(label="🧠 AI Wisdom Upgraded!", state="complete")
+            else:
+                status.update(label="🧠 Internal Neural Drift detected", state="error")
         st.session_state["_needs_retrain"] = False
         
     # Use active learning model if available

@@ -39,19 +39,77 @@ def train_model():
     return model, explainer, round(acc, 3)
 
 
-def predict(model, explainer, row: dict) -> tuple[float, int, list]:
-    X = pd.DataFrame([{c: row[c] for c in FEATURE_COLS}])
+@st.cache_data
+def predict_cached(row_tuple: tuple) -> tuple[float, int, list]:
+    """
+    Cached version of prediction. 
+    row_tuple: tuple of (experience, skills_count, education, gap_years)
+    """
+    # We need the model and explainer. Since they are cached via @st.cache_resource,
+    # calling train_model() is fast and returns the same objects.
+    model, explainer, _ = train_model()
+    
+    X = pd.DataFrame([{
+        "experience": row_tuple[0],
+        "skills_count": row_tuple[1],
+        "education": row_tuple[2],
+        "gap_years": row_tuple[3]
+    }])
     prob = float(model.predict_proba(X)[0][1])
     pred = int(model.predict(X)[0])
     shap_vals = explainer.shap_values(X)[0]
-    return prob, pred, shap_vals
+    return prob, pred, list(shap_vals)
 
+
+def predict(model, explainer, row: dict) -> tuple[float, int, list]:
+    # Use the cached helper for performance
+    row_tuple = (row["experience"], row["skills_count"], row["education"], row["gap_years"])
+    return predict_cached(row_tuple)
+
+
+@st.cache_data
+def build_whisper_cached(prob: float, pred: int, shap_vals: list, row_tuple: tuple) -> dict:
+    """
+    Cached whisper building.
+    """
+    # Convert list back to array for zip
+    shap_vals_arr = np.array(shap_vals)
+    pairs = sorted(zip(FEATURE_COLS, shap_vals_arr), key=lambda x: abs(x[1]), reverse=True)
+    lines = []
+
+    for feat, sv in pairs[:3]:
+        if abs(sv) < 0.04:
+            continue
+        label = FEATURE_LABELS[feat]
+        if sv > 0:
+            lines.append(f"✅ Strong {label} boosts hire probability")
+        else:
+            lines.append(f"⚠️ Weak {label} lowers hire probability")
+
+    # Gap context (we need gap_reason, so we pass it in row_tuple or separate)
+    # For now, let's just keep the logic simple.
+    
+    confidence = "High confidence" if abs(prob - 0.5) > 0.25 else "Borderline — trust your gut"
+    rec = "✅ HIRE" if pred == 1 else "⛔ REJECT"
+
+    return {
+        "recommendation": rec,
+        "confidence":     confidence,
+        "lines":          lines,
+        "prob":           prob,
+        "pred":           pred,
+    }
 
 def build_whisper(prob: float, pred: int, shap_vals, row: dict) -> dict:
-    """
-    Returns a structured whisper dict:
-      recommendation, confidence, lines (list of text), prob, pred
-    """
+    row_tuple = (row.get("gap_reason", ""),) # we only need gap_reason for the extra logic
+    # But wait, the original build_whisper had more logic. Let me refine.
+    
+    # Actually, let's just cache the WHOLE build_whisper by row attributes.
+    return _build_whisper_impl(prob, pred, list(shap_vals), row["gap_reason"], row["gap_years"])
+
+@st.cache_data
+def _build_whisper_impl(prob: float, pred: int, shap_vals_list: list, gap_reason: str, gap_years: float) -> dict:
+    shap_vals = np.array(shap_vals_list)
     pairs = sorted(zip(FEATURE_COLS, shap_vals), key=lambda x: abs(x[1]), reverse=True)
     lines = []
 
@@ -65,8 +123,6 @@ def build_whisper(prob: float, pred: int, shap_vals, row: dict) -> dict:
             lines.append(f"⚠️ Weak {label} lowers hire probability")
 
     # Gap context
-    gap_reason = row.get("gap_reason", "")
-    gap_years  = row.get("gap_years", 0)
     if gap_years > 0.5:
         if gap_reason in POSITIVE_GAPS:
             lines.append(f"💡 Gap reason '{gap_reason}' is low-risk — avoid bias!")

@@ -26,54 +26,65 @@ SCORE = {
 
 
 def init_state():
-    if "game_started" not in st.session_state:
-        st.session_state.update({
-            # --- Game States ---
-            "game_started":  False,
-            "round_idx":     0,
-            "score":         0,
-            "lives":         3,
-            "health":        100,      # Start at 100
-            "xp":            0,        # Experience points
-            "streak":        0,
-            "best_streak":   0,
-            "game_over":     False,
-            "resumes":       [],
-            "awaiting_next": False,
-            "last_result":   None,
-            "history":       [],       # List of decision results
-            "decision_log":  [],       # For active learning
-            "skips_used":    0,
-            "ai_uses":       3,
-            "hint_shown":    False,
-            "_hint_used_this_round": False,
-            "_pred_round":   -1,
-            "_prob":         0.5,
-            "_ai_pred":      0,
-            "_whisper":      {},
-            "_llm_whisper":  None,
-            
-            # --- New Metrics ---
-            "bias_score":    0,
-            "ai_agreement_score": 0,
-            "rank":          "Beginner", # Beginner, Analyst, Expert, Bias Master
-            
-            # --- Powerup Status ---
-            "powerups": {
-                "bias_shield": 1,
-                "lucky_charm": 1,
-                "second_look": 1,
-            },
-            "bias_shield_active": False,
-            "lucky_charm_active": False,
-            "second_look_used":   False,
-            "blind_mode":         False,
-            
-            "round_complete_anim": False,
-            "player_name": "Challenger",
-            "achievements": [],
-            "difficulty": "normal",
-        })
+    """Initializes all required session state keys if they don't exist."""
+    defaults = {
+        # --- Game States ---
+        "game_started":  False,
+        "round_idx":     0,
+        "score":         0,
+        "lives":         3,
+        "health":        100,
+        "xp":            0,
+        "streak":        0,
+        "best_streak":   0,
+        "game_over":     False,
+        "resumes":       [],
+        "awaiting_next": False,
+        "last_result":   None,
+        "history":       [],
+        "decision_log":  [],
+        "skips_used":    0,
+        "ai_uses":       3,
+        "hint_shown":    False,
+        "_hint_used_this_round": False,
+        "_pred_round":   -1,
+        "_prob":         0.5,
+        "_ai_pred":      0,
+        "_whisper":      {},
+        "_llm_whisper":  None,
+        
+        # --- New Metrics ---
+        "bias_score":    0,
+        "ai_agreement_score": 0,
+        "rank":          "Beginner",
+        
+        "bias_shield_active": False,
+        "lucky_charm_active": False,
+        "second_look_used":   False,
+        "blind_mode":         False,
+        
+        "round_complete_anim": False,
+        "player_name": "Challenger",
+        "achievements": [],
+        "difficulty": "normal",
+    }
+    
+    for key, val in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = val
+
+    # --- Powerup Status ---
+    if "powerups" not in st.session_state:
+        st.session_state.powerups = {
+            "bias_shield": 1,
+            "lucky_charm": 1,
+            "second_look": 1,
+        }
+    else:
+        # Ensure all keys exist in current dict
+        for p_key in ["bias_shield", "lucky_charm", "second_look"]:
+            if p_key not in st.session_state.powerups:
+                st.session_state.powerups[p_key] = 1
 
 
 def start_game(player_name: str = "Challenger", difficulty: str = "normal"):
