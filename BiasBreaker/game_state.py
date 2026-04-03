@@ -28,16 +28,21 @@ SCORE = {
 def init_state():
     if "game_started" not in st.session_state:
         st.session_state.update({
+            # --- Game States ---
             "game_started":  False,
             "round_idx":     0,
             "score":         0,
             "lives":         3,
+            "health":        100,      # Start at 100
+            "xp":            0,        # Experience points
+            "streak":        0,
+            "best_streak":   0,
             "game_over":     False,
             "resumes":       [],
             "awaiting_next": False,
             "last_result":   None,
-            "history":       [],
-            "decision_log":  [],
+            "history":       [],       # List of decision results
+            "decision_log":  [],       # For active learning
             "skips_used":    0,
             "ai_uses":       3,
             "hint_shown":    False,
@@ -47,8 +52,13 @@ def init_state():
             "_ai_pred":      0,
             "_whisper":      {},
             "_llm_whisper":  None,
-            "streak":        0,
-            "best_streak":   0,
+            
+            # --- New Metrics ---
+            "bias_score":    0,
+            "ai_agreement_score": 0,
+            "rank":          "Beginner", # Beginner, Analyst, Expert, Bias Master
+            
+            # --- Powerup Status ---
             "powerups": {
                 "bias_shield": 1,
                 "lucky_charm": 1,
@@ -56,6 +66,9 @@ def init_state():
             },
             "bias_shield_active": False,
             "lucky_charm_active": False,
+            "second_look_used":   False,
+            "blind_mode":         False,
+            
             "round_complete_anim": False,
             "player_name": "Challenger",
             "achievements": [],

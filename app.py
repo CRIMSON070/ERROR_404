@@ -13,8 +13,13 @@ import pandas as pd
 import random
 import shap
 import xgboost as xgb
+import copy
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+
+from logic.decision_engine import process_decision
+from logic.bias_analysis import calculate_bias
+from components.vs_panel import render_vs_panel
 
 # ═══════════════════════════════════════════════════════════
 #  PAGE CONFIG
@@ -413,9 +418,10 @@ def pick_skills(n: int, i: int) -> list:
 
 def render_resume_card(row: dict, idx: int):
     is_boss  = row.get("is_boss", False)
-    name     = make_name(idx)
+    blind    = st.session_state.get("blind_mode", False)
+    name     = "Candidate" if blind else make_name(idx)
     skills   = pick_skills(int(row["skills_count"]), idx)
-    edu      = EDUCATION_MAP[int(row["education_level"])]
+    edu      = "Hidden" if blind else EDUCATION_MAP[int(row["education_level"])]
     exp_str  = f"{row['experience']:.1f} years"
     gap      = (f"{row['gap_years']:.1f} yrs ({row['gap_reason']})"
                 if row["gap_years"] >= 0.1 else "None")
@@ -483,6 +489,10 @@ def render_hud():
     curr        = st.session_state.round_idx + 1
     pct         = int((st.session_state.round_idx / total) * 100)
 
+    health_pct = int(max(0, min(100, st.session_state.health)))
+    xp_pct = int(min(100, st.session_state.xp % 100))
+    rank = get_rank(st.session_state.xp)
+
     st.markdown(f"""
     <div class="hud">
       <div class="hud-item">
@@ -491,8 +501,8 @@ def render_hud():
       </div>
       <div class="hud-sep"></div>
       <div class="hud-item">
-        <div class="hud-label">Lives</div>
-        <div class="hud-value lives-val" style="font-size:16px">{lives_icons}</div>
+        <div class="hud-label">Health</div>
+        <div class="hud-value" style="color:{'var(--hire)' if health_pct>=60 else ('var(--skip)' if health_pct>=30 else 'var(--reject)')};">{health_pct}%</div>
       </div>
       <div class="hud-sep"></div>
       <div class="hud-item">
@@ -501,11 +511,18 @@ def render_hud():
       </div>
       <div class="hud-sep"></div>
       <div class="hud-item">
+        <div class="hud-label">XP</div>
+        <div class="hud-value" style="color:var(--accent3);">{st.session_state.xp}</div>
+      </div>
+      <div class="hud-sep"></div>
+      <div class="hud-item">
         <div class="hud-label">AI Hints</div>
         <div class="hud-value" style="color:{ai_col};font-size:16px">{ai_icons}</div>
       </div>
     </div>
     <div class="prog-wrap"><div class="prog-fill" style="width:{pct}%"></div></div>
+    <div class="prog-wrap" style="margin-top:4px;"><div class="prog-fill" style="width:{health_pct}%;background:linear-gradient(90deg,#ef4444,#22c55e);"></div></div>
+    <div style="font-size:10px;color:#888;margin-top:3px;">Health & XP: {health_pct}% / {xp_pct}% toward next level · Rank: <b>{rank}</b></div>
     """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════
@@ -605,6 +622,12 @@ def init_state():
             "round_idx":     0,
             "score":         0,
             "lives":         3,
+            "xp":            0,
+            "streak":        0,
+            "health":        100,
+            "bias_score":    0.0,
+            "ai_agreement_score": 0,
+            "second_look_used": False,
             "game_over":     False,
             "resumes":       [],
             "awaiting_next": False,
@@ -623,6 +646,7 @@ def init_state():
             "ach_guru":     False,
             "ach_flawless": False,
             "boss_correct": False,
+            "blind_mode": False,
         })
 
 # ═══════════════════════════════════════════════════════════
@@ -650,6 +674,16 @@ def maybe_adjust_difficulty():
 # ═══════════════════════════════════════════════════════════
 #  ACHIEVEMENT CHECKS  (NEW)
 # ═══════════════════════════════════════════════════════════
+def get_rank(xp):
+    if xp >= 250:
+        return "Bias Master"
+    if xp >= 150:
+        return "Expert"
+    if xp >= 70:
+        return "Analyst"
+    return "Beginner"
+
+
 def check_achievements():
     if st.session_state.score >= 200 and not st.session_state.ach_guru:
         st.session_state.ach_guru = True
@@ -709,6 +743,23 @@ def render_game_over():
             f'<span {ch}>{val}</span></div>', unsafe_allow_html=True)
 
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
+
+    # Final bias reporting in end screen
+    end_bias = calculate_bias(st.session_state.history, ai_confidence_threshold=0.6)
+    st.markdown(f"""
+      <div style='text-align:center;padding:10px;margin-bottom:10px;border:1px solid #333;backdrop-filter:blur(5px);'>
+        <div style='font-size:13px;color:#fff;'>Bias Score: <b>{end_bias['bias_score']}</b></div>
+        <div style='font-size:13px;color:var(--accent);'>Most common bias type: <b>{end_bias['bias_type']}</b></div>
+        <div style='font-size:12px;color:#aaa;margin-top:4px;'>Tip: Focus on skill signals over surface gaps.</div>
+      </div>
+    """, unsafe_allow_html=True)
+
+    ai_trend = "You tend to over-penalize career gaps. Try focusing on skill signals instead."
+    if end_bias['bias_level'] == 'Fair':
+        ai_trend = "Great work: you are keeping bias under control."
+
+    st.markdown(f"<div style='font-size:12px;color:#ccc;text-align:center;margin-bottom:10px;'>{ai_trend}</div>", unsafe_allow_html=True)
+
     if st.button("🔄  Play Again", use_container_width=True):
         for k in list(st.session_state.keys()):
             del st.session_state[k]
@@ -774,6 +825,8 @@ def run_game(model, explainer):
         st.markdown('<div class="boss-banner">🔥 FINAL BOSS RESUME 🔥</div>', unsafe_allow_html=True)
 
     render_hud()
+    blind_toggle = st.checkbox("🕶️ Blind Mode (hide education/name)", value=st.session_state.get("blind_mode", False))
+    st.session_state.blind_mode = blind_toggle
     render_resume_card(row, round_idx)
 
     # Pre-compute prediction once per round (keyed by round index)
@@ -804,11 +857,52 @@ def run_game(model, explainer):
                else "result-box result-lose")
         msg_h = res["msg"].replace("\n","<br>")
         st.markdown(f'<div class="{box}">{msg_h}</div>', unsafe_allow_html=True)
+
+        render_vs_panel("hire" if ai_pred == 1 else "reject", res["action"])
+
         actual = "✅ Good Hire" if res["outcome"]==1 else "❌ Bad Hire"
         st.markdown(
             f'<div style="text-align:center;color:#888;font-size:12px;margin-top:7px;">'
             f'Actual outcome: <b style="color:#f0f0f0">{actual}</b></div>',
             unsafe_allow_html=True)
+
+        # What-if simulator
+        if res["action"] in ("hire", "reject"):
+            alt_action = "reject" if res["action"] == "hire" else "hire"
+            alt_state = copy.deepcopy(st.session_state)
+            alt_eval = process_decision(
+                user_choice=alt_action,
+                candidate=row,
+                game_state=alt_state,
+                ai_prediction=ai_pred,
+                ai_confidence=prob,
+            )
+            st.markdown(
+                f'<div style="font-size:12px;color:#a78bfa;margin-top:8px;">'
+                f'“If you had chosen <b>{alt_action.upper()}</b>: {alt_eval["message"]} ',
+                unsafe_allow_html=True,
+            )
+
+        # Feedback panel
+        with st.expander("🎓 Learn from this decision"):
+            st.markdown(f"**AI Recommendation:** { 'Hire' if ai_pred == 1 else 'Reject' } "
+                        f"(confidence {int(prob*100)}%)")
+            reasons = [r.strip() for r in whisper.replace("\n\n", " ").split('.') if r.strip()]
+            top_reasons = reasons[:3] if reasons else ["Mixed signals from features."]
+            st.markdown("**Top factors:**")
+            for item_r in top_reasons:
+                st.markdown(f"- {item_r}.")
+            bias_text = "No significant bias pattern yet."
+            if res.get("bias_flag"):
+                bias_text = "⚠️ Possible gap bias: rejected strong candidate with short gap."
+            st.markdown(f"**Bias feedback:** {bias_text}")
+
+        # bias meter update
+        ba = calculate_bias(st.session_state.history, ai_confidence_threshold=0.6)
+        level_icon = "✅" if ba["bias_level"] == "Fair" else "⚠️" if ba["bias_level"] == "Moderate" else "🚨"
+        st.markdown(f'<div style="margin-top:8px;font-size:13px;color:#ccc;">{level_icon} '
+                    f'Bias level: <b>{ba["bias_level"]}</b> ({ba["bias_type"]}) — score {ba["bias_score"]}</div>',
+                    unsafe_allow_html=True)
 
         check_achievements()
 
@@ -860,7 +954,8 @@ def run_game(model, explainer):
     if activated == "second_look":
         # Force-reveal whisper (counts as hint-used for AI bonus)
         st.session_state.powerups["second_look"]      = 0
-        st.session_state.hint_shown                   = True
+        st.session_state.second_look_used              = True
+        st.session_state.hint_shown                    = True
         st.session_state["_hint_used_this_round"]     = True
         st.rerun()
 
@@ -890,50 +985,40 @@ def run_game(model, explainer):
         if st.button("⏭  SKIP",   use_container_width=True): action = "skip"
 
     if action:
-        outcome = int(row["outcome"])
-        delta, msg, correct = compute_score_delta(
-            action, outcome, ai_pred, row,
-            shield=st.session_state.bias_shield_active,
-            charm=st.session_state.lucky_charm_active,
-            is_boss=is_boss,
+        # Make decision through the central engine
+        res = process_decision(
+            user_choice=action,
+            candidate=row,
+            game_state=st.session_state,
+            ai_prediction=ai_pred,
+            ai_confidence=prob,
         )
 
-        # Boss-specific result message
-        if is_boss and correct:
+        # Boss-specific marker
+        if res.get("is_boss") and res.get("result") == "correct":
             st.session_state.boss_correct = True
-            msg = "BOSS DEFEATED! Double Points! 🔥\n" + msg
 
-        st.session_state.score += delta
-
-        # Life loss on incorrect non-skip decision
-        if action != "skip" and not correct:
-            st.session_state.lives -= 1
+        # Sync last result for UI
+        st.session_state.last_result = {
+            "action": action,
+            "delta": res.get("delta", 0),
+            "msg": res.get("message", ""),
+            "outcome": int(row.get("outcome", 0)),
+            "correct": res.get("result") == "correct",
+            "is_boss": is_boss,
+            "followed_ai": res.get("followed_ai", False),
+            "bias_flag": res.get("bias_flag", False),
+            "health_change": res.get("health_change", 0),
+            "xp_gain": res.get("xp_gain", 0),
+            "ai_confidence": prob,
+        }
 
         if action == "skip":
             st.session_state.skips_used += 1
 
-        followed_ai = (action == "hire") == (ai_pred == 1) if action != "skip" else False
-
-        st.session_state.history.append({
-            "round":       round_idx,
-            "action":      action,
-            "outcome":     outcome,
-            "correct":     correct,
-            "followed_ai": followed_ai,
-            "delta":       delta,
-        })
-
-        st.session_state.last_result = {
-            "action":  action,
-            "delta":   delta,
-            "msg":     msg,
-            "outcome": outcome,
-            "correct": correct,
-            "is_boss": is_boss,
-        }
         st.session_state.awaiting_next = True
 
-        if st.session_state.lives <= 0:
+        if st.session_state.lives <= 0 or st.session_state.health <= 0:
             st.session_state.game_over = True
 
         st.rerun()

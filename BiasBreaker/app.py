@@ -16,6 +16,10 @@ from game_state import (
     init_state, start_game, compute_score,
     save_leaderboard, load_leaderboard, analyze_bias, evaluate_skill_gaps
 )
+from logic.decision_engine import process_decision
+from logic.bias_analysis import calculate_bias
+from components.vs_panel import render_vs_panel
+from components.powerups import render_powerup_panel as render_pu_panel
 
 # ══════════════════════════════════════════════════════════
 #  PAGE CONFIG
@@ -24,7 +28,7 @@ st.set_page_config(
     page_title="BiasBreaker: The Hiring Game",
     page_icon="⚔️",
     layout="centered",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 # ══════════════════════════════════════════════════════════
@@ -447,7 +451,49 @@ html, body, [data-testid="stApp"] {
   border: 1px solid var(--border) !important;
   border-radius: 10px !important;
 }
-.divider { border:none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+/* ── NEON GLOWS & GLASSMORPHISM ── */
+.glass-container {
+    background: rgba(16, 16, 31, 0.4);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+}
+.neon-border-blue { border: 2px solid var(--blue); box-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
+.neon-border-gold { border: 2px solid var(--gold); box-shadow: 0 0 15px rgba(245, 197, 24, 0.5); }
+.neon-border-purple { border: 2px solid var(--purple); box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
+
+.stat-v-box {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 10px;
+    border: 1px solid var(--border);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 14px 0;
+}
+
+/* ── ADDITIONAL CYBERPUNK POLISH ── */
+.stApp {
+    background: radial-gradient(circle at top right, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
+}
+
+.pu-chip.active { box-shadow: 0 0 10px var(--blue); }
+.pu-chip.used   { filter: grayscale(1); opacity: 0.5; }
+.pu-chip.available { border-color: var(--blue); }
+
+/* Glassmorphism for sidebar */
+[data-testid="stSidebar"] {
+    background-color: rgba(16, 16, 31, 0.8) !important;
+    backdrop-filter: blur(10px);
+    border-right: 1px solid var(--border);
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -466,87 +512,168 @@ def edu_armor(level: int) -> int:
 
 
 def render_hud():
-    lives_icons = "❤️" * st.session_state.lives + "🖤" * (3 - st.session_state.lives)
-    ai_left = st.session_state.ai_uses
-    ai_str  = "🤖" * ai_left + "⬜" * (3 - ai_left)
-    total   = len(st.session_state.resumes)
-    curr    = st.session_state.round_idx + 1
-    pct     = int(st.session_state.round_idx / total * 100) if total else 0
+    s     = st.session_state
+    total = len(s.resumes)
+    curr  = s.round_idx + 1
+    pct   = int(s.round_idx / total * 100) if total else 0
 
-    # Streak badge
-    streak = st.session_state.get("streak", 0)
-    streak_html = (
-        f'<div class="streak-badge" style="float:right">🔥 Streak {streak}</div>'
-        if streak >= 3 else ""
-    )
-    
-    # Bias Report Feature
-    bias_res = analyze_bias(st.session_state.history, st.session_state.resumes)
-    bias_color = "var(--red)" if bias_res["score"] > 30 else ("var(--orange)" if bias_res["score"] > 15 else "var(--green)")
+    # ── Rank XP thresholds ──────────────────────────────────────
+    rank_thresholds = {
+        "Beginner":    (0,   200),
+        "Analyst":     (200, 500),
+        "Expert":      (500, 1000),
+        "Bias Master": (1000, 1000),
+    }
+    xp_min, xp_max = rank_thresholds.get(s.rank, (0, 200))
+    xp_pct = int(min(100, (s.xp - xp_min) / max(1, xp_max - xp_min) * 100))
+    next_rank = {"Beginner": "Analyst", "Analyst": "Expert",
+                 "Expert": "Bias Master", "Bias Master": "MAX"}.get(s.rank, "MAX")
+    rank_colors = {"Beginner": "#6b6b8a", "Analyst": "#38bdf8",
+                   "Expert": "#a855f7", "Bias Master": "#f5c518"}
+    rank_col = rank_colors.get(s.rank, "#6b6b8a")
+
+    # ── Health colour ───────────────────────────────────────────
+    hp = s.health
+    hp_col  = "#22c55e" if hp > 70 else ("#f5c518" if hp > 30 else "#ef4444")
+    hp_icon = "❤️" if hp > 70 else ("🟡" if hp > 30 else "💀")
+
+    # ── Bias Radar ──────────────────────────────────────────────
+    bias_res   = calculate_bias(s.history, s.resumes)
+    bias_score = bias_res["bias_score"]
+    bias_col   = "#ef4444" if bias_score > 30 else ("#f97316" if bias_score > 15 else "#22c55e")
+    bias_label = bias_res["bias_level"].upper()
+
+    # ── Streak fire badge ───────────────────────────────────────
+    streak     = s.streak
+    streak_html = ""
+    if streak >= 5:
+        streak_html = f'<span style="background:rgba(249,115,22,0.2);border:1px solid #f97316;border-radius:20px;padding:2px 10px;font-size:12px;color:#f97316;font-family:\'Cinzel\',serif;font-weight:700;animation:streakPop 0.4s ease;">🔥 {streak}x INFERNO</span>'
+    elif streak >= 3:
+        streak_html = f'<span style="background:rgba(249,115,22,0.12);border:1px solid #f97316;border-radius:20px;padding:2px 10px;font-size:12px;color:#f97316;font-family:\'Cinzel\',serif;font-weight:700;">🔥 {streak}x STREAK</span>'
+    else:
+        streak_html = f'<span style="color:#6b6b8a;font-family:\'Share Tech Mono\',monospace;font-size:12px;">{streak}x</span>'
 
     st.markdown(f"""
-    {streak_html}
-    <div style="font-size: 11px; text-align: right; margin-bottom: 5px; color: {bias_color}; font-family: 'Share Tech Mono', monospace;">
-      BIAS RADAR: {bias_res['status']}
-    </div>
-    <div class="hud-bar">
-      <div class="hud-item">
-        <div class="hud-label">Score</div>
-        <div class="hud-value hud-score">{st.session_state.score}</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#6b6b8a">
+        RANK: <span style="color:{rank_col};font-weight:700">{s.rank.upper()}</span>
+        &nbsp;·&nbsp; XP: <span style="color:#a855f7">{s.xp}</span>
+        &nbsp;→&nbsp; <span style="color:#3a3a5a;font-size:9px">{next_rank}</span>
       </div>
-      <div class="hud-sep"></div>
-      <div class="hud-item">
-        <div class="hud-label">Lives</div>
-        <div class="hud-value hud-lives" style="font-size:18px">{lives_icons}</div>
-      </div>
-      <div class="hud-sep"></div>
-      <div class="hud-item">
-        <div class="hud-label">Round</div>
-        <div class="hud-value hud-round">{curr} / {total}</div>
-      </div>
-      <div class="hud-sep"></div>
-      <div class="hud-item">
-        <div class="hud-label">AI Hints</div>
-        <div class="hud-value hud-ai" style="font-size:18px">{ai_str}</div>
+      <div style="font-size:10px;color:{bias_col};font-family:'Share Tech Mono',monospace">
+        ⚖️ BIAS: {bias_label} ({bias_res['bias_type']})
       </div>
     </div>
-    <div class="prog-wrap"><div class="prog-fill" style="width:{pct}%"></div></div>
+
+    <div class="hud-bar glass-container" style="border:1px solid var(--border);padding:14px 18px;">
+      <div class="hud-item">
+        <div class="hud-label">{hp_icon} Health</div>
+        <div class="hud-value" style="color:{hp_col};font-size:20px">{hp}%</div>
+        <div style="background:rgba(255,255,255,0.06);border-radius:4px;height:4px;margin-top:4px;overflow:hidden">
+          <div style="height:100%;border-radius:4px;width:{hp}%;background:{hp_col};transition:width 0.6s ease"></div>
+        </div>
+      </div>
+      <div class="hud-sep"></div>
+      <div class="hud-item">
+        <div class="hud-label">⭐ Score</div>
+        <div class="hud-value hud-score" style="font-size:20px">{s.score}</div>
+      </div>
+      <div class="hud-sep"></div>
+      <div class="hud-item">
+        <div class="hud-label">🎯 Round</div>
+        <div class="hud-value hud-round" style="font-size:20px">{curr}/{total}</div>
+      </div>
+      <div class="hud-sep"></div>
+      <div class="hud-item">
+        <div class="hud-label">⚡ Streak</div>
+        <div style="margin-top:4px">{streak_html}</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px">
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+          <span style="font-size:9px;color:#6b6b8a;font-family:'Share Tech Mono',monospace">XP TO {next_rank.upper()}</span>
+          <span style="font-size:9px;color:{rank_col};font-family:'Share Tech Mono',monospace">{xp_pct}%</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border-radius:4px;height:5px;overflow:hidden">
+          <div style="height:100%;border-radius:4px;width:{xp_pct}%;background:linear-gradient(90deg,{rank_col},{rank_col}88);transition:width 0.8s ease"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+          <span style="font-size:9px;color:#6b6b8a;font-family:'Share Tech Mono',monospace">ROUND PROGRESS</span>
+          <span style="font-size:9px;color:#38bdf8;font-family:'Share Tech Mono',monospace">{pct}%</span>
+        </div>
+        <div class="prog-wrap" style="margin:0">
+          <div class="prog-fill" style="width:{pct}%"></div>
+        </div>
+      </div>
+    </div>
     """, unsafe_allow_html=True)
+
+    # ── Live Bias Warning (inline alert, not sidebar) ───────────
+    if bias_score > 15 and len(s.history) >= 2:
+        bias_type = bias_res["bias_type"]
+        if bias_score > 30:
+            st.markdown(f"""
+            <div style="background:rgba(239,68,68,0.1);border:1px solid #ef4444;
+                        border-left:4px solid #ef4444;border-radius:10px;
+                        padding:10px 14px;margin:6px 0;font-size:12px;
+                        font-family:'Share Tech Mono',monospace;color:#ef4444">
+              🚨 HIGH BIAS ALERT — You're showing strong <b>{bias_type}</b>.
+              <span style="color:#c0a0a0"> Recalibrate your decisions!</span>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown(f"""
+            <div style="background:rgba(249,115,22,0.08);border:1px solid #f97316;
+                        border-left:4px solid #f97316;border-radius:10px;
+                        padding:8px 14px;margin:6px 0;font-size:11px;
+                        font-family:'Share Tech Mono',monospace;color:#f97316">
+              ⚠️ Bias building: <b>{bias_type}</b> — watch your next decision.
+            </div>
+            """, unsafe_allow_html=True)
 
 
 def render_monster_card(row: dict, idx: int):
+    s_state = st.session_state
     is_boss = row.get("is_boss", False)
-    name    = pick_name(idx)
-    skills  = pick_skills(int(row["skills_count"]), idx)
-    edu_lv  = int(row["education"])
-    edu_str = EDUCATION_MAP.get(edu_lv, "Bachelor's Degree")
-    exp     = row["experience"]
-    gap     = row["gap_years"]
-    gap_r   = row.get("gap_reason", "No Gap")
+    
+    # Blind Mode check
+    blind = s_state.get("blind_mode", False)
+    name = "???" if blind else pick_name(idx)
+    edu_lv = int(row["education"])
+    edu_str = "???" if blind else EDUCATION_MAP.get(edu_lv, "Bachelor's Degree")
+    
+    skills = pick_skills(int(row["skills_count"]), idx)
+    exp = row["experience"]
+    gap = row["gap_years"]
+    gap_r = row.get("gap_reason", "No Gap")
     gap_str = f"{gap:.1f} yrs — {gap_r}" if gap >= 0.1 else "None"
 
-    # Card stat percentages (for bar fills)
-    hp_pct      = min(exp / 20, 1.0)
-    atk_pct     = min(int(row["skills_count"]) / 10, 1.0)
-    armor_pct   = edu_armor(edu_lv) / 100
-    risk_pct    = min(gap / 5, 1.0)
+    # Card stat percentages
+    hp_pct = min(exp / 20, 1.0)
+    atk_pct = min(int(row["skills_count"]) / 10, 1.0)
+    armor_pct = edu_armor(edu_lv) / 100
+    risk_pct = min(gap / 5, 1.0)
 
-    hp_col      = hp_color(hp_pct)
-    atk_col     = "#38bdf8"
-    armor_col   = "#a855f7"
-    risk_col    = "#f97316" if risk_pct > 0.4 else "#22c55e"
+    hp_col = hp_color(hp_pct)
+    atk_col = "#38bdf8"
+    armor_col = "#a855f7"
+    risk_col = "#f97316" if risk_pct > 0.4 else "#22c55e"
 
     tags = "".join(f'<span class="skill-tag">{s}</span>' for s in skills)
-    card_cls = "monster-card boss-card" if is_boss else "monster-card"
+    card_cls = "monster-card boss-card" if is_boss else "monster-card glass-container"
     card_type = "👹 BOSS CANDIDATE" if is_boss else "⚔️ CANDIDATE CARD"
 
     st.markdown(f"""
-    <div class="{card_cls}">
+    <div class="{card_cls} {'neon-border-gold' if is_boss else ''}">
       <div class="card-header">
         <div class="card-banner"></div>
         <div class="card-type">{card_type} · #{idx+1}</div>
         <div class="candidate-name">{name}</div>
-        <div class="candidate-sub">Resume Review · Round {idx+1}</div>
+        <div class="candidate-sub">{'BLIND MODE ACTIVE' if blind else 'Resume Review · Round ' + str(idx+1)}</div>
       </div>
 
       <div class="card-stats">
@@ -571,7 +698,7 @@ def render_monster_card(row: dict, idx: int):
           <div class="stat-label">Education · Armor</div>
           <div class="stat-value">{edu_str}</div>
           <div class="stat-bar-wrap">
-            <div class="stat-bar-fill" style="width:{int(armor_pct*100)}%;background:{armor_col}"></div>
+            <div class="stat-bar-fill" style="width:{int(armor_pct*100) if not blind else 0}%;background:{armor_col}"></div>
           </div>
         </div>
         <div class="stat-box">
@@ -592,7 +719,7 @@ def render_monster_card(row: dict, idx: int):
     """, unsafe_allow_html=True)
 
     bs = row.get("backstory", "")
-    if bs:
+    if bs and not blind:
         with st.expander("📖 Candidate Backstory"):
             st.markdown(
                 f'<div style="font-size:13px;color:#b0b0c8;line-height:1.9;'
@@ -603,98 +730,302 @@ def render_monster_card(row: dict, idx: int):
 
 def render_ai_panel(whisper: dict, llm_text: str | None = None):
     prob  = whisper.get("prob", 0.5)
-    pred  = whisper.get("pred", 0)
     lines = whisper.get("lines", [])
-    rec   = whisper.get("recommendation", "⛔ REJECT")
     conf  = whisper.get("confidence", "")
 
     pct = int(prob * 100)
     col = "#22c55e" if prob >= 0.55 else "#ef4444" if prob < 0.45 else "#a855f7"
-    panel_cls = "ai-panel" if pred == 1 else "ai-panel warn"
 
     body_html = ""
     if llm_text:
-        body_html = f'<div class="ai-line" style="color:#e0d8f0;font-style:italic">"{llm_text}"</div><br>'
+        body_html = f'<div class="ai-line" style="color:#e0d8f0;font-style:italic;margin-bottom:10px;">" {llm_text} "</div>'
     for ln in lines:
         body_html += f'<div class="ai-line">{ln}</div>'
 
     st.markdown(f"""
-    <div class="{panel_cls}">
+    <div class="ai-panel glass-container" style="border-left: 4px solid {col};">
       <div class="ai-mentor-header">
         <div class="ai-avatar">🤖</div>
         <div>
-          <div class="ai-mentor-name">AI Mentor</div>
-          <div class="ai-mentor-sub">SHAP · XGBoost · {('Ollama Active' if llm_text else 'SHAP Mode')}</div>
+          <div class="ai-mentor-name">AI Whisper</div>
+          <div class="ai-mentor-sub">SHAP Reasoner · {conf}</div>
         </div>
       </div>
-      <div class="ai-rec">{rec}</div>
       {body_html}
       <div class="prob-bar-bg">
         <div class="prob-bar-fill" style="width:{pct}%;background:{col}"></div>
       </div>
       <div class="prob-label">HIRE PROBABILITY: <strong style="color:{col}">{pct}%</strong></div>
-      <div class="ai-confidence">· {conf} ·</div>
     </div>
     """, unsafe_allow_html=True)
 
 
-def render_powerup_panel() -> str | None:
-    pu = st.session_state.powerups
-    activated = None
-    PU = {
-        "bias_shield": ("🛡️", "Bias Shield",  "Block bias penalty"),
-        "lucky_charm": ("🍀", "Lucky Charm",   "+10 if follow AI" ),
-        "second_look": ("🔍", "Second Look",   "Free AI reveal"   ),
-    }
-    cols = st.columns(3)
-    for col, (key, (icon, name, desc)) in zip(cols, PU.items()):
-        count = pu.get(key, 0)
-        cls   = "used" if count == 0 else "active" if st.session_state.get(f"{key}_active") else ""
-        with col:
+def render_powerup_bar():
+    # Helper to call the modular component
+    return render_pu_panel()
+
+
+# ══════════════════════════════════════════════════════════
+#  SIDEBAR
+# ══════════════════════════════════════════════════════════
+def render_sidebar():
+    """Renders the game sidebar with missions, skill analysis, and blind mode toggle."""
+    s = st.session_state
+    with st.sidebar:
+        st.markdown("""
+        <div style="text-align:center;padding:14px 0 6px">
+          <div style="font-size:32px">⚔️</div>
+          <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:900;
+                      background:linear-gradient(135deg,#f5c518,#a855f7);
+                      -webkit-background-clip:text;-webkit-text-fill-color:transparent">
+            BiasBreaker
+          </div>
+          <div style="font-size:9px;letter-spacing:3px;color:#6b6b8a;
+                      font-family:'Share Tech Mono',monospace;margin-top:2px">
+            AI HIRING SIMULATOR
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # ── Blind Mode Toggle ────────────────────────────────
+        blind = st.toggle("🕶️ Blind Mode", value=s.get("blind_mode", False),
+                          help="Hides name and education — judge on skills + experience only")
+        if blind != s.get("blind_mode", False):
+            st.session_state.blind_mode = blind
+            st.rerun()
+
+        st.markdown("---")
+
+        # ── Session Stats ────────────────────────────────────
+        if s.get("game_started", False):
+            st.markdown(
+                '<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;'
+                'letter-spacing:3px;color:#6b6b8a;text-transform:uppercase;'
+                'margin-bottom:8px">📊 Session Stats</div>',
+                unsafe_allow_html=True)
+
+            rank_colors = {
+                "Beginner": "#6b6b8a", "Analyst": "#38bdf8",
+                "Expert": "#a855f7", "Bias Master": "#f5c518"
+            }
+            rc = rank_colors.get(s.rank, "#6b6b8a")
             st.markdown(f"""
-            <div class="pu-chip {cls}">
-              <span class="pu-icon-big">{icon}</span>
-              <div class="pu-name">{name}</div>
-              <div class="pu-status">{'AVAILABLE' if count > 0 else 'USED'}</div>
-            </div>""", unsafe_allow_html=True)
-            if count > 0:
-                if st.button(f"{icon} Use", key=f"pu_{key}", use_container_width=True):
-                    activated = key
-    return activated
+            <div style="background:rgba(255,255,255,0.03);border:1px solid #1e1e3a;
+                        border-radius:10px;padding:12px;margin-bottom:8px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <span style="font-size:11px;color:#6b6b8a;font-family:'Share Tech Mono',monospace">RANK</span>
+                <span style="font-size:12px;font-weight:700;color:{rc};font-family:'Cinzel',serif">{s.rank.upper()}</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <span style="font-size:11px;color:#6b6b8a;font-family:'Share Tech Mono',monospace">XP</span>
+                <span style="font-size:12px;font-weight:700;color:#a855f7">{s.get('xp', 0)}</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <span style="font-size:11px;color:#6b6b8a;font-family:'Share Tech Mono',monospace">BEST STREAK</span>
+                <span style="font-size:12px;font-weight:700;color:#f97316">{s.get('best_streak', 0)}x</span>
+              </div>
+              <div style="display:flex;justify-content:space-between">
+                <span style="font-size:11px;color:#6b6b8a;font-family:'Share Tech Mono',monospace">HEALTH</span>
+                <span style="font-size:12px;font-weight:700;color:{'#22c55e' if s.health > 70 else '#f5c518' if s.health > 30 else '#ef4444'}">{s.get('health', 100)}%</span>
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # ── Bias Meter ────────────────────────────────────
+            bias_res = calculate_bias(s.history, s.resumes)
+            bs_score = bias_res["bias_score"]
+            bs_color = "#ef4444" if bs_score > 30 else ("#f5c518" if bs_score > 15 else "#22c55e")
+            bs_label = "🚨 High Bias" if bs_score > 30 else ("⚠️ Moderate Bias" if bs_score > 15 else "✅ Fair Decision")
+            bdown = bias_res.get("breakdown", {})
+
+            st.markdown(f"""
+            <div style="background:rgba(255,255,255,0.03);border:1px solid #1e1e3a;
+                        border-radius:10px;padding:12px;margin-bottom:8px">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;
+                          letter-spacing:2px;color:#6b6b8a;margin-bottom:8px">
+                ⚖️ BIAS METER
+              </div>
+              <div style="background:rgba(255,255,255,0.05);border-radius:6px;
+                          height:8px;overflow:hidden;margin-bottom:6px">
+                <div style="height:100%;border-radius:6px;width:{min(100,bs_score)}%;
+                            background:linear-gradient(90deg,{bs_color},{bs_color}aa);
+                            transition:width 0.6s ease"></div>
+              </div>
+              <div style="font-size:11px;color:{bs_color};font-weight:700;margin-bottom:8px">
+                {bs_label}
+              </div>
+              <div style="font-size:10px;color:#6b6b8a;font-family:'Share Tech Mono',monospace">
+                Gap: {bdown.get('gap',0)}% · Edu: {bdown.get('education',0)}% · Exp: {bdown.get('experience',0)}%
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # ── Dynamic Missions ──────────────────────────────
+            from game_state import evaluate_skill_gaps
+            skill_data = evaluate_skill_gaps(s.history, s.resumes)
+            if skill_data["missions"]:
+                st.markdown(
+                    '<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;'
+                    'letter-spacing:3px;color:#6b6b8a;text-transform:uppercase;'
+                    'margin-bottom:6px">🎯 Active Missions</div>',
+                    unsafe_allow_html=True)
+                for m in skill_data["missions"][:2]:
+                    st.markdown(
+                        f'<div style="font-size:11px;color:#b0a8cc;margin-bottom:4px;'
+                        f'line-height:1.5">{m}</div>',
+                        unsafe_allow_html=True)
+
+        st.markdown("---")
+        st.markdown(
+            '<div style="font-size:10px;color:#3a3a5a;text-align:center;'
+            'font-family:\'Share Tech Mono\',monospace">'
+            'BiasBreaker v3.0 · AI Hiring Simulator</div>',
+            unsafe_allow_html=True)
 
 
 def render_result(res: dict, row: dict):
-    is_boss = res.get("is_boss") and res.get("correct")
-    if is_boss:
-        cls = "result-box result-boss"
-    elif res["delta"] > 0:
-        cls = "result-box result-win"
-    elif res["action"] == "skip":
-        cls = "result-box result-skip"
+    """
+    Renders the decision result with VS panel, What-If simulator,
+    and the full student learning panel.
+    """
+    from logic.bias_analysis import get_bias_feedback_message
+
+    is_boss       = res.get("is_boss", row.get("is_boss", False))
+    ai_synced     = res.get("ai_synced", False)
+    ai_choice     = "Hire" if st.session_state["_ai_pred"] == 1 else "Reject"
+    player_choice = "Hire" if res.get("action", "") == "hire" else "Reject"
+
+    # ── VS Panel ──────────────────────────────────────────────
+    render_vs_panel(ai_choice, player_choice, ai_synced)
+
+    # ── Narrative Result Box ───────────────────────────────────
+    action = res.get("action", "skip")
+    result = res.get("result", "skipped")
+    cls = "result-box"
+    if action == "skip":
+        cls += " result-skip"
+    elif result == "correct":
+        cls += " result-boss" if is_boss else " result-win"
     else:
-        cls = "result-box result-lose"
+        cls += " result-lose"
 
-    msg_h = res["msg"].replace("\n", "<br>")
-    actual = "✅ Good Hire" if res["outcome"] == 1 else "❌ Bad Hire"
+    # Render message (supports multi-line with newline)
+    msg_html = res.get("message", "").replace("\n", "<br>")
+    st.markdown(f'<div class="{cls}">{msg_html}</div>', unsafe_allow_html=True)
 
-    st.markdown(f"""
-    <div class="{cls}">{msg_h}</div>
-    <div class="actual-outcome">Actual outcome: <strong style="color:#e8e8f0">{actual}</strong></div>
-    """, unsafe_allow_html=True)
+    # ── XP & Health delta toast ───────────────────────────────
+    xp   = res.get("xp_gain", 0)
+    hp   = res.get("health_change", 0)
+    sd   = res.get("score_delta", 0)
+    delta_parts = []
+    if sd != 0:  delta_parts.append(f"Score: {'+'if sd>0 else ''}{sd}")
+    if xp != 0:  delta_parts.append(f"XP: +{xp}")
+    if hp != 0:  delta_parts.append(f"Health: {'+'if hp>0 else ''}{hp}%")
+    if delta_parts:
+        dc = "#22c55e" if sd >= 0 else "#ef4444"
+        st.markdown(
+            f'<div style="text-align:center;font-size:12px;color:{dc};'
+            f'font-family:\'Share Tech Mono\',monospace;letter-spacing:1px;margin-top:4px">'
+            f'{" · ".join(delta_parts)}</div>',
+            unsafe_allow_html=True)
 
-    # Lazy-load Ollama feedback AFTER result is on screen.
-    # Only fetches once (guarded by _llm_loaded flag).
-    if not res.get("_llm_loaded") and ollama_available() and res["action"] != "skip":
-        fb = ollama_feedback(row, res["action"])
+    # ── What-If Simulator ─────────────────────────────────────
+    with st.expander("🔮 What-If Simulator"):
+        alt_action     = "Reject" if action == "hire" else "Hire"
+        actual_outcome = "Good Hire" if res.get("outcome", 0) == 1 else "Bad Hire / Under-performer"
+        alt_correct    = (alt_action == "Hire" and res.get("outcome", 0) == 1) or \
+                         (alt_action == "Reject" and res.get("outcome", 0) == 0)
+        alt_result_text = "✅ Correct" if alt_correct else "❌ Wrong"
+        alt_color       = "#22c55e" if alt_correct else "#ef4444"
+        whisper         = st.session_state.get("_whisper", {})
+        prob_pct        = int(whisper.get("prob", 0.5) * 100)
+
+        st.markdown(f"""
+        <div style="background:rgba(255,255,255,0.03);border:1px solid #1e1e3a;
+                    border-radius:12px;padding:16px;font-size:13px;line-height:1.8">
+          <div style="font-family:'Cinzel',serif;font-size:14px;color:#f5c518;
+                      margin-bottom:10px">If you had chosen {alt_action.upper()}…</div>
+          <div style="color:#b0a8cc">
+            The candidate was actually: <b style="color:#e8e8f0">{actual_outcome}</b><br>
+            That would have been: <b style="color:{alt_color}">{alt_result_text}</b><br>
+            AI Hire Probability: <b style="color:#a855f7">{prob_pct}%</b>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:#6b6b8a;
+                      font-family:'Share Tech Mono',monospace">
+            Conclusion: Your original {action.upper()} was <b style="color:{'#22c55e' if result=='correct' else '#ef4444'}">{result.upper()}</b>.
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # ── 🎓 Student Learning Panel ─────────────────────────────
+    with st.expander("🎓 Learn from this decision"):
+        whisper = st.session_state.get("_whisper", {})
+        prob    = whisper.get("prob", 0.5)
+        conf    = whisper.get("confidence", "Unknown")
+        rec     = whisper.get("recommendation", "N/A")
+        lines   = whisper.get("lines", [])
+        pct     = int(prob * 100)
+        col     = "#22c55e" if prob >= 0.55 else "#ef4444" if prob < 0.45 else "#a855f7"
+
+        # AI Explanation block
+        st.markdown(f"""
+        <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.3);
+                    border-left:4px solid #a855f7;border-radius:10px;padding:14px;
+                    margin-bottom:12px">
+          <div style="font-family:'Cinzel',serif;font-size:13px;color:#a855f7;
+                      margin-bottom:8px">🤖 AI EXPLANATION</div>
+          <div style="font-size:13px;color:#f5c518;font-weight:700;margin-bottom:6px">
+            Recommendation: {rec}
+          </div>
+          <div style="font-size:11px;color:#6b6b8a;font-family:'Share Tech Mono',monospace;
+                      margin-bottom:10px">
+            Confidence: {conf} · Hire Probability: {pct}%
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:6px;
+                      height:6px;overflow:hidden;margin-bottom:10px">
+            <div style="height:100%;border-radius:6px;width:{pct}%;
+                        background:{col};transition:width 0.8s ease"></div>
+          </div>
+          <div style="font-size:12px;color:#b0a8cc">
+            <b style="color:#e8e8f0">Top Feature Signals:</b>
+          </div>
+        """, unsafe_allow_html=True)
+
+        for ln in lines:
+            st.markdown(
+                f'<div style="font-size:12px;color:#b0a8cc;margin:3px 0;">· {ln}</div>',
+                unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        # Bias feedback block
+        if res.get("bias_flag"):
+            bias_type = calculate_bias(
+                st.session_state.history, st.session_state.resumes
+            ).get("bias_type", "Gap Bias")
+            bias_msg = get_bias_feedback_message(bias_type, row)
+            st.markdown(f"""
+            <div style="margin-top:4px;padding:12px;background:rgba(239,68,68,0.1);
+                        border:1px solid #ef4444;border-radius:8px">
+              <span style="color:#ef4444;font-weight:bold;font-family:'Cinzel',serif">
+                ⚠️ BIAS DETECTED
+              </span><br>
+              <span style="font-size:12px;color:#c0a8a8;line-height:1.6">{bias_msg}</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+    # ── Ollama LLM Feedback (lazy-loaded) ────────────────────
+    if not res.get("_llm_loaded") and ollama_available() and action != "skip":
+        fb = ollama_feedback(row, action)
         res["llm_feedback"] = fb
         res["_llm_loaded"]  = True
-        st.session_state.last_result = res  # persist back
 
-    llm_feedback = res.get("llm_feedback") or ""
+    llm_feedback = res.get("llm_feedback")
     if llm_feedback:
         st.markdown(
             f'<div style="margin-top:8px;font-size:13px;color:#b0a8cc;'
-            f'font-style:italic;font-family:Rajdhani,sans-serif">🤖 {llm_feedback}</div>',
+            f'font-style:italic;">🤖 {llm_feedback}</div>',
             unsafe_allow_html=True,
         )
 
@@ -719,102 +1050,135 @@ def render_leaderboard():
 
 
 def render_game_over():
-    s     = st.session_state
-    score = s.score
-    hist  = s.history
+    s         = st.session_state
+    score     = s.score
+    hist      = s.history
     n_correct = sum(1 for h in hist if h.get("correct"))
-    ai_used   = 3 - s.ai_uses
-    ai_follow = sum(1 for h in hist if h.get("followed_ai"))
+    accuracy  = int(n_correct / len(hist) * 100) if hist else 0
 
-    if   score >= 250: title, emoji = "LEGENDARY HR!",  "🏆"
-    elif score >= 150: title, emoji = "GREAT HIRING!",  "🎯"
-    elif score >= 60:  title, emoji = "DECENT RUN",     "👔"
-    else:              title, emoji = "NEEDS WORK",     "💀"
+    bias_res  = calculate_bias(hist, s.resumes)
+    bdown     = bias_res.get("breakdown", {})
+    bias_meta = bias_res.get("meta", {})
 
+    # ── Hero Banner ───────────────────────────────────────────
     st.markdown(f"""
-    <div class="gameover-screen">
-      <div class="gameover-emoji">{emoji}</div>
-      <div class="gameover-title" style="color:{'#f5c518' if score>=150 else '#ef4444'}">🎯 LEVEL COMPLETE REPORT</div>
+    <div class="gameover-screen glass-container neon-border-gold">
+      <div class="gameover-emoji">{'🏆' if accuracy >= 70 else '🛡️' if accuracy >= 50 else '💀'}</div>
+      <div class="gameover-title">{'LEVEL MASTERED' if accuracy >= 70 else 'ROUND COMPLETE'}</div>
       <div class="gameover-score">{score}</div>
-      <div class="gameover-label" style="font-size:14px; color:var(--gold);">FINAL SCORE: {title}</div>
+      <div class="gameover-label">FINAL SCORE · RANK: {s.rank.upper()}</div>
     </div>
     """, unsafe_allow_html=True)
 
-    # ── LEARNING & SELF-IMPROVEMENT ──
-    gaps = evaluate_skill_gaps(hist, s.resumes)
-    bias_res = analyze_bias(hist, s.resumes)
+    # ── Top-line KPI cards ────────────────────────────────────
+    c1, c2, c3, c4 = st.columns(4)
+    with c1:
+        st.markdown(f'<div class="stat-v-box"><b>ACCURACY</b><br><h2 style="color:var(--blue)">{accuracy}%</h2></div>', unsafe_allow_html=True)
+    with c2:
+        bs_col = "var(--red)" if bias_res["bias_score"] > 30 else ("var(--orange)" if bias_res["bias_score"] > 15 else "var(--green)")
+        st.markdown(f'<div class="stat-v-box"><b>BIAS SCORE</b><br><h2 style="color:{bs_col}">{bias_res["bias_score"]}</h2></div>', unsafe_allow_html=True)
+    with c3:
+        st.markdown(f'<div class="stat-v-box"><b>XP EARNED</b><br><h2 style="color:var(--purple)">{s.xp}</h2></div>', unsafe_allow_html=True)
+    with c4:
+        st.markdown(f'<div class="stat-v-box"><b>BEST STREAK</b><br><h2 style="color:var(--orange)">{s.best_streak}x</h2></div>', unsafe_allow_html=True)
 
-    # Lazy-load AI Coach
-    if ollama_available() and "career_coach_fb" not in s:
-        s.career_coach_fb = ollama_career_coach(
-            strengths=gaps["strengths"],
-            weaknesses=gaps["weaknesses"],
-            bias_status=bias_res["status"],
-            score=score
-        )
-        
-    ai_coach_html = ""
-    if s.get("career_coach_fb"):
-        ai_coach_html = f"""
-        <div style="background:rgba(168,85,247,0.1); border:1px solid var(--purple); border-radius:12px; padding:15px; margin-top:15px;">
-            <div style="color:var(--purple); font-weight:bold; font-family:'Cinzel',serif; margin-bottom:5px;">🤖 AI CAREER COACH</div>
-            <div style="font-size:13px; font-style:italic; line-height:1.6; color:#e0d8f0;">"{s.career_coach_fb}"</div>
-        </div>
-        """
-
-    missions_html = "".join([f'<div style="color:var(--blue); font-size:14px; margin-bottom:4px;">{m}</div>' for m in gaps['missions']])
+    # ── Bias Breakdown card ────────────────────────────────────
+    st.markdown("### ⚖️ Bias Analysis Report")
+    bi_icon = bias_meta.get("icon", "⚖️")
+    bi_desc = bias_meta.get("description", "")
+    bi_tip  = bias_meta.get("tip", "")
+    bi_lvl  = bias_res["bias_level"]
+    bi_type = bias_res["bias_type"]
+    bi_col  = "#ef4444" if bi_lvl == "High" else ("#f5c518" if bi_lvl == "Moderate" else "#22c55e")
 
     st.markdown(f"""
-    <div style="display:flex; gap:15px; margin-bottom:15px;">
-        <div style="flex:1; background:var(--card); border:1px solid var(--green); padding:15px; border-radius:12px;">
-            <div style="color:var(--green); font-family:'Cinzel',serif; font-weight:bold;">💪 STRENGTHS</div>
-            <div style="font-size:13px; color:var(--text); margin-top:5px;">{gaps['strengths']}</div>
+    <div style="background:rgba(255,255,255,0.03);border:1px solid #1e1e3a;
+                border-radius:14px;padding:18px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:28px">{bi_icon}</span>
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:15px;color:{bi_col};font-weight:700">
+            {bi_lvl} · {bi_type}
+          </div>
+          <div style="font-size:12px;color:#6b6b8a">{bi_desc}</div>
         </div>
-        <div style="flex:1; background:var(--card); border:1px solid var(--red); padding:15px; border-radius:12px;">
-            <div style="color:var(--red); font-family:'Cinzel',serif; font-weight:bold;">⚠️ WEAKNESSES</div>
-            <div style="font-size:13px; color:var(--text); margin-top:5px;">{gaps['weaknesses']}</div>
+      </div>
+      <div style="font-size:12px;color:#b0a8cc;margin-bottom:12px">{bi_tip}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div style="text-align:center;background:rgba(255,255,255,0.03);
+                    border:1px solid #1e1e3a;border-radius:8px;padding:8px">
+          <div style="font-size:9px;color:#6b6b8a;letter-spacing:2px;font-family:'Share Tech Mono',monospace">GAP BIAS</div>
+          <div style="font-size:18px;font-weight:700;color:#38bdf8;font-family:'Cinzel',serif">{bdown.get('gap',0)}%</div>
         </div>
+        <div style="text-align:center;background:rgba(255,255,255,0.03);
+                    border:1px solid #1e1e3a;border-radius:8px;padding:8px">
+          <div style="font-size:9px;color:#6b6b8a;letter-spacing:2px;font-family:'Share Tech Mono',monospace">EDU BIAS</div>
+          <div style="font-size:18px;font-weight:700;color:#a855f7;font-family:'Cinzel',serif">{bdown.get('education',0)}%</div>
+        </div>
+        <div style="text-align:center;background:rgba(255,255,255,0.03);
+                    border:1px solid #1e1e3a;border-radius:8px;padding:8px">
+          <div style="font-size:9px;color:#6b6b8a;letter-spacing:2px;font-family:'Share Tech Mono',monospace">EXP BIAS</div>
+          <div style="font-size:18px;font-weight:700;color:#f97316;font-family:'Cinzel',serif">{bdown.get('experience',0)}%</div>
+        </div>
+      </div>
     </div>
-    
-    <div style="background:var(--card); border:1px dashed var(--blue); padding:15px; border-radius:12px; margin-bottom:15px;">
-        <div style="color:var(--blue); font-family:'Cinzel',serif; font-weight:bold; margin-bottom:8px;">🎯 NEXT ROUND MISSIONS</div>
-        {missions_html}
-    </div>
-    
-    {ai_coach_html}
-    <hr class="divider">
     """, unsafe_allow_html=True)
 
-    st.markdown('<div style="font-family:Cinzel,serif;font-size:16px;margin-bottom:10px;color:#f5c518">📊 Session Breakdown</div>', unsafe_allow_html=True)
+    # ── AI Coach Suggestion ────────────────────────────────────
+    st.markdown("### 🤖 AI Coach Analysis")
+    if bias_res["bias_score"] > 30:
+        suggestion = f"You show a high tendency towards <b>{bi_type}</b>. {bi_tip}"
+    elif accuracy < 50:
+        suggestion = ("Your accuracy needs work. Use the <b>AI Whisper</b> hints more often — "
+                      "follow the AI's recommendations to understand the ML model's logic.")
+    elif s.best_streak < 3:
+        suggestion = ("Work on building consecutive correct decisions to unlock streak bonuses. "
+                      "Focus on skill breadth and experience over education level.")
+    else:
+        suggestion = ("Exceptional performance! You've balanced speed, objectivity, and "
+                      "AI collaboration perfectly. You're a Bias Master in the making!")
 
+    st.markdown(f"""
+    <div style="background:rgba(168,85,247,0.1);border:1px solid var(--purple);
+                border-radius:12px;padding:20px;margin-bottom:14px">
+      <div style="font-family:'Cinzel',serif;font-size:14px;color:var(--purple);
+                  margin-bottom:10px">💬 AI COACH FEEDBACK</div>
+      <div style="font-size:14px;color:#c8c0e0;line-height:1.7">"{suggestion}"</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── Session Breakdown table ────────────────────────────────
+    st.markdown('<div style="font-family:Cinzel,serif;font-size:16px;margin-bottom:10px;color:#f5c518">📊 Session Breakdown</div>', unsafe_allow_html=True)
     breakdown = [
-        ("Bias Radar",        bias_res["status"],        "neu"),
-        ("Correct Decisions", n_correct,                 "good"),
-        ("Wrong Decisions",   len(hist) - n_correct,     "bad"),
-        ("AI Hints Used",     ai_used,                   "neu"),
-        ("Times Followed AI", ai_follow,                 "good"),
-        ("Best Streak",       s.get("best_streak", 0),   "neu"),
+        ("Bias Level",        bi_lvl,                     "neu"),
+        ("Primary Bias Type", bi_type,                     "bad" if bias_res["bias_score"] > 0 else "good"),
+        ("Correct Decisions", f"{n_correct}/{len(hist)}",  "good"),
+        ("Accuracy",          f"{accuracy}%",               "good" if accuracy >= 70 else "neu"),
+        ("Best Streak",       f"{s.best_streak}x",          "good"),
+        ("XP Earned",         s.xp,                        "good"),
+        ("Rank Achieved",     s.rank,                      "good"),
+        ("Final Health",      f"{s.health}%",               "good" if s.health > 50 else "bad"),
     ]
     for label, val, cls in breakdown:
-        st.markdown(f'<div class="stat-row-go"><span class="srow-key">{label}</span><span class="srow-{cls}">{val}</span></div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="stat-row-go"><span class="srow-key">{label}</span>'
+            f'<span class="srow-{cls}">{val}</span></div>',
+            unsafe_allow_html=True)
 
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
-    # Save score
+    # Save & Leaderboard
     save_leaderboard(s.player_name, score, n_correct, len(hist))
     render_leaderboard()
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
     _, c, _ = st.columns([1, 2, 1])
     with c:
-        # Adaptive gameplay logic
         next_diff = "hard" if score > 100 else ("normal" if score > 30 else "easy")
         if st.button(f"🔄  Start Next Round ({next_diff.upper()})", use_container_width=True):
             p_name = s.player_name
-            # Clear state but keep some keys
             for k in list(st.session_state.keys()):
                 del st.session_state[k]
-            # Restart with adaptive difficulty
             start_game(p_name, next_diff)
             st.rerun()
 
@@ -947,11 +1311,12 @@ def run_game(model, explainer):
             )
 
     # ── Power-Ups ────────────────────────────────────────
-    activated = render_powerup_panel()
+    activated = render_powerup_bar()
     if activated == "second_look":
         st.session_state.powerups["second_look"]     = 0
         st.session_state.hint_shown                  = True
         st.session_state["_hint_used_this_round"]    = True
+        st.session_state.second_look_used            = True
         st.session_state["_llm_whisper"]             = None
         st.rerun()
     if activated == "bias_shield":
@@ -977,47 +1342,58 @@ def run_game(model, explainer):
         if st.button("⏭  SKIP",   use_container_width=True): action = "skip"
 
     if action:
-        outcome = int(row["outcome"])
-        delta, msg, correct = compute_score(
-            action, outcome, ai_pred, row,
-            shield=st.session_state.bias_shield_active,
-            charm=st.session_state.lucky_charm_active,
-            is_boss=is_boss,
+        # Use modular decision engine
+        res = process_decision(
+            action, row, st.session_state, ai_pred, prob
         )
-        if is_boss and correct:
-            st.session_state["boss_correct"] = True
-            msg = "👹 BOSS DEFEATED — Double Points! 🏆\n" + msg
-
-        st.session_state.score += delta
-        if action != "skip" and not correct:
-            st.session_state.lives -= 1
-        if action == "skip":
-            st.session_state.skips_used += 1
-
-        followed_ai = (action == "hire") == (ai_pred == 1) if action != "skip" else False
+        
+        # Update session state from engine results
+        st.session_state.score += res["score_delta"]
+        st.session_state.health += res["health_change"]
+        st.session_state.xp += res["xp_gain"]
+        
+        # Clamp health
+        st.session_state.health = max(0, min(100, st.session_state.health))
+        
+        # Rank Logic
+        if st.session_state.xp > 1000: st.session_state.rank = "Bias Master"
+        elif st.session_state.xp > 500: st.session_state.rank = "Expert"
+        elif st.session_state.xp > 200: st.session_state.rank = "Analyst"
+        
+        if res["result"] == "correct":
+            st.session_state.streak += 1
+            if st.session_state.streak > st.session_state.best_streak:
+                st.session_state.best_streak = st.session_state.streak
+        elif action != "skip":
+            st.session_state.streak = 0
+            st.session_state.lives -= 1 # Keep lives for backward compatibility if needed, though health is primary now
 
         # Update decision log for active learning
         st.session_state.decision_log.append({
-            **row, "outcome": outcome
+            **row, "outcome": int(row["outcome"])
         })
         
-        # Trigger Active Learning Retrain (lazy loading on next round)
         st.session_state["_needs_retrain"] = True
 
         st.session_state.history.append({
             "round": round_idx, "action": action,
-            "outcome": outcome, "correct": correct,
-            "followed_ai": followed_ai, "delta": delta,
+            "outcome": int(row["outcome"]), "correct": (res["result"] == "correct"),
+            "followed_ai": res.get("ai_synced", False), "delta": res["score_delta"],
         })
+        
+        # Prepare result metadata for render_result
         st.session_state.last_result = {
-            "action": action, "delta": delta, "msg": msg,
-            "outcome": outcome, "correct": correct,
-            "is_boss": is_boss,
-            "llm_feedback": None,   # filled lazily on result screen
+            "action": action, 
+            **res,
+            "outcome": int(row["outcome"]),
+            "llm_feedback": None,
             "_llm_loaded": False,
         }
+        
         st.session_state.awaiting_next = True
-        if st.session_state.lives <= 0:
+        
+        # Game Over checks
+        if st.session_state.lives <= 0 or st.session_state.health <= 0:
             st.session_state.game_over = True
         st.rerun()
 
@@ -1093,6 +1469,7 @@ def main():
     """, height=0, width=0)
 
     init_state()
+    render_sidebar()
     model, explainer, acc = train_model()
 
     if st.session_state.game_over:
