@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>BiasBreaker: The Hiring Arena</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#ddb7ff", "primary-container": "#b76dff",
+                    "secondary": "#a5e7ff", "secondary-container": "#00d2ff",
+                    "tertiary": "#e9c400", "tertiary-container": "#c9a900",
+                    "error": "#ffb4ab", "surface": "#0b1326",
+                    "surface-container-low": "#131b2e", "surface-container-highest": "#2d3449",
+                    "background": "#0b1326", "on-surface": "#dae2fd",
+                    "outline-variant": "#494454"
+                },
+                fontFamily: {
+                    "headline": ["Space Grotesk"], "body": ["Inter"], "label": ["Space Grotesk"]
+                }
+            }
+        }
+    }
+</script>
+<style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .drop-shadow-glow { filter: drop-shadow(0 0 8px rgba(221, 183, 255, 0.8)); }
+    .perspective-1000 { perspective: 1000px; }
+    .rotate-y-hover:hover { transform: rotateY(10deg) rotateX(5deg) scale(1.02); }
+    .animate-pulse-subtle { animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .7; } }
+    
+    #splash-screen, #gameover-screen {
+        position: fixed; inset: 0; z-index: 100; background: rgba(11, 19, 38, 0.95);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        backdrop-filter: blur(10px);
+    }
+    .hidden { display: none !important; }
+</style>
+</head>
+
+<body class="bg-background text-on-surface font-body min-h-screen overflow-hidden">
+    
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <h1 class="text-6xl font-black text-primary drop-shadow-glow font-headline mb-4 uppercase text-center tracking-widest">
+            BiasBreaker<br><span class="text-3xl text-secondary">The Hiring Arena</span>
+        </h1>
+        <p class="text-on-surface/70 w-1/2 text-center mb-8">
+            Review applicant Monster Cards using AI assistance. Beware of biases. Make the correct call to earn points.
+        </p>
+        <button id="btn-start" onclick="startGame()" class="px-8 py-4 bg-primary/20 border border-primary/50 text-primary font-bold rounded hover:bg-primary/40 hover:scale-105 transition-all uppercase tracking-widest">
+            ENTER THE ARENA
+        </button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="hidden">
+        <h1 class="text-5xl font-black text-tertiary drop-shadow-glow font-headline mb-2 uppercase text-center tracking-widest">
+            LEVEL COMPLETE REPORT
+        </h1>
+        <div id="go-score" class="text-6xl text-primary font-black mb-8 drop-shadow-glow">0</div>
+        
+        <div class="grid grid-cols-2 gap-6 w-full max-w-3xl mb-8">
+            <div class="bg-surface-container-low p-6 rounded-lg border border-green-500/30">
+                <h3 class="text-green-400 font-bold mb-2 uppercase tracking-wide">Strengths</h3>
+                <p id="go-strengths" class="text-sm opacity-80">...</p>
+            </div>
+            <div class="bg-surface-container-low p-6 rounded-lg border border-error/30">
+                <h3 class="text-error font-bold mb-2 uppercase tracking-wide">Weaknesses</h3>
+                <p id="go-weaknesses" class="text-sm opacity-80">...</p>
+            </div>
+        </div>
+        
+        <div class="w-full max-w-3xl bg-surface-container-low p-6 border border-secondary/30 rounded-lg mb-8">
+            <h3 class="text-secondary font-bold mb-2 uppercase tracking-wide">Next Round Missions</h3>
+            <ul id="go-missions" class="text-sm opacity-80 list-disc pl-4 text-blue-300"></ul>
+        </div>
+        
+        <button onclick="startGame()" class="px-8 py-4 bg-tertiary/20 border border-tertiary/50 text-tertiary font-bold rounded hover:bg-tertiary/40 hover:scale-105 transition-all uppercase tracking-widest">
+            PLAY AGAIN (Adaptive)
+        </button>
+    </div>
+
+    <!-- BACKGROUND GRAPHICS -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute inset-0 bg-cover opacity-10 grayscale mix-blend-overlay"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background"></div>
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute h-1 w-1 bg-primary rounded-full top-1/4 left-1/4 animate-pulse"></div>
+            <div class="absolute h-1 w-1 bg-secondary rounded-full top-1/3 right-1/4 animate-pulse-subtle"></div>
+            <div class="absolute h-1 w-1 bg-tertiary rounded-full bottom-1/4 left-1/2 animate-pulse"></div>
+        </div>
+    </div>
+
+    <!-- HEADER / HUD -->
+    <header class="fixed top-0 w-full z-40 flex justify-between items-center px-6 py-3 bg-slate-950/80 backdrop-blur-xl border-b border-primary/20 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
+        <div class="flex items-center gap-8">
+            <span class="text-2xl font-black text-primary drop-shadow-glow font-headline tracking-widest uppercase">BiasBreaker</span>
+            <div class="hidden md:flex items-center gap-6 px-4 py-1 bg-surface-container-low rounded-lg border border-outline-variant/20">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">stars</span>
+                    <span id="hud-score" class="font-headline font-bold text-tertiary">0</span>
+                </div>
+                <div id="hud-lives" class="flex items-center gap-1 text-error">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                </div>
+                <div id="hud-round" class="text-xs font-headline tracking-widest opacity-80 uppercase bg-surface-container-highest px-3 py-1 rounded">Round: 1</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- RESULT TOAST / OVERLAY -->
+    <div id="result-overlay" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-surface-container-highest border-2 rounded-xl p-4 shadow-2xl hidden opacity-0 transition-opacity duration-300 transform scale-95">
+        <h2 id="res-msg" class="text-xl font-bold font-headline mb-2">Result</h2>
+        <p id="res-sub" class="text-sm opacity-80 mb-4">Actual: </p>
+        <button onclick="nextRound()" class="w-full py-2 bg-primary/20 border border-primary/50 text-primary rounded font-bold uppercase">Next Candidate</button>
+    </div>
+
+    <!-- MAIN GAME ARENA -->
+    <main id="game-arena" class="pt-24 pb-28 px-8 h-screen flex flex-col items-center justify-center relative z-10 hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full max-w-6xl items-center">
+            
+            <!-- Monster Card -->
+            <div class="lg:col-span-8 flex justify-center perspective-1000">
+                <div class="relative w-80 h-[32rem] bg-surface-container-highest rounded-xl border-2 border-primary/40 shadow-[0_0_30px_rgba(139,92,246,0.3)] transition-transform duration-500 rotate-y-hover overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-surface-container-lowest via-transparent to-primary/10"></div>
+                    <div class="absolute inset-0 border-2 border-primary/20 rounded-xl group-hover:border-primary transition-colors"></div>
+                    
+                    <div class="relative p-6 flex flex-col items-center text-center">
+                        <div id="candidate-name" class="uppercase font-headline font-black text-2xl tracking-tight text-white mb-1 drop-shadow-glow">N/A</div>
+                        <div id="candidate-type" class="text-[10px] font-mono text-secondary-container bg-secondary/10 px-3 py-1 border border-secondary/20 rounded-full tracking-[0.2em] uppercase">Candidate</div>
+                    </div>
+                    
+                    <div class="relative mx-6 h-40 bg-slate-950 rounded-lg overflow-hidden border border-outline-variant/30 flex items-center justify-center">
+                        <span class="text-6xl">👹</span>
+                    </div>
+
+                    <div class="relative p-6 space-y-5">
+                        <div>
+                            <div class="flex justify-between text-[10px] font-headline font-bold uppercase mb-1 drop-shadow-glow">
+                                <span>Experience (HP)</span>
+                                <span id="candidate-exp-text" class="text-primary font-bold">0 yrs</span>
+                            </div>
+                            <div class="h-2 w-full bg-surface-container-low rounded-full overflow-hidden border border-outline-variant/30">
+                                <div id="candidate-exp-bar" class="h-full bg-gradient-to-r from-primary to-primary-container" style="width: 50%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center gap-3 bg-surface-container-low/50 p-3 rounded-lg border border-outline-variant/30">
+                                <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">swords</span>
+                                <div>
+                                    <div class="text-[9px] font-mono uppercase opacity-70">Skills</div>
+                                    <div id="candidate-skills" class="text-xl font-headline font-black text-secondary drop-shadow-glow">0</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 bg-surface-container-low/50 p-3 rounded-lg border border-outline-variant/30">
+                                <span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">shield</span>
+                                <div>
+                                    <div class="text-[9px] font-mono uppercase opacity-70">Armor</div>
+                                    <div id="candidate-armor" class="text-xl font-headline font-black text-tertiary drop-shadow-glow">0</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between pt-3 border-t border-outline-variant/20">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-error text-lg">warning</span>
+                                <span class="text-xs font-headline font-bold uppercase">Career Gap Risk</span>
+                            </div>
+                            <div class="text-error font-bold text-lg" id="candidate-gap">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Mentor Panel -->
+            <div class="lg:col-span-4 h-full flex flex-col">
+                <div class="bg-slate-900/60 backdrop-blur-2xl border border-secondary/30 p-6 rounded-xl shadow-2xl relative h-full">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-full border-2 border-secondary bg-secondary/10 flex items-center justify-center animate-pulse">
+                            🤖
+                        </div>
+                        <div>
+                            <h3 class="font-headline font-bold text-sm tracking-widest text-secondary uppercase drop-shadow-[0_0_8px_rgba(165,231,255,0.8)]">AI Whisper</h3>
+                        </div>
+                    </div>
+                    
+                    <div id="ai-paneling">
+                        <p class="font-mono text-xs opacity-70 mb-4">AI Hints available: <span id="hint-count" class="text-primary font-bold">3</span></p>
+                        <div id="ai-secret" class="hidden">
+                            <p id="ai-whisper-text" class="font-mono text-[13px] text-on-surface leading-loose mb-6 italic border-l-2 border-secondary pl-3">
+                                ...
+                            </p>
+                            <div class="bg-surface-container-low p-3 rounded text-xs opacity-90 border-l-[3px] border-tertiary">
+                                <strong>Probability to Hire:</strong> <span id="ai-prob" class="text-tertiary">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Dock Buttons -->
+    <footer id="action-dock" class="fixed bottom-0 w-full z-50 flex justify-center gap-12 items-center px-4 py-4 pb-8 bg-slate-950/90 rounded-t-3xl border-t border-primary/30 shadow-[0_-10px_30px_rgba(139,92,246,0.2)] hidden">
+        <button onclick="submitAction('reject')" class="group flex items-center justify-center bg-error/10 text-error rounded-xl py-4 px-10 shadow-[0_0_15px_rgba(255,180,171,0.2)] border border-error/40 hover:bg-error/30 hover:scale-110 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-3xl mr-3">close</span>
+            <span class="font-headline font-bold text-lg uppercase tracking-widest">Reject</span>
+        </button>
+        <button id="btn-hint" onclick="useHint()" class="group flex items-center justify-center bg-secondary/10 text-secondary rounded-xl py-3 px-6 shadow-[0_0_15px_rgba(165,231,255,0.2)] border border-secondary/40 hover:bg-secondary/30 hover:scale-105 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-2xl mr-2">psychology</span>
+            <span class="font-headline font-bold text-sm uppercase tracking-widest">AI Hint</span>
+        </button>
+        <button onclick="submitAction('hire')" class="group flex items-center justify-center bg-green-500/10 text-green-400 rounded-xl py-4 px-10 shadow-[0_0_15px_rgba(34,197,94,0.2)] border border-green-500/40 hover:bg-green-500/30 hover:scale-110 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-3xl mr-3">check_circle</span>
+            <span class="font-headline font-bold text-lg uppercase tracking-widest">Hire</span>
+        </button>
+    </footer>
+
+    <script>
+        // API interactions
+        async function fetchState() {
+            const res = await fetch('/api/state');
+            const data = await res.json();
+            
+            if (data.state === "start") {
+                document.getElementById('splash-screen').classList.remove('hidden');
+                document.getElementById('game-arena').classList.add('hidden');
+                document.getElementById('action-dock').classList.add('hidden');
+                document.getElementById('gameover-screen').classList.add('hidden');
+            } else if (data.state === "game_over") {
+                document.getElementById('splash-screen').classList.add('hidden');
+                document.getElementById('game-arena').classList.add('hidden');
+                document.getElementById('action-dock').classList.add('hidden');
+                document.getElementById('gameover-screen').classList.remove('hidden');
+                
+                document.getElementById('go-score').innerText = data.score;
+                document.getElementById('go-strengths').innerText = data.strengths;
+                document.getElementById('go-weaknesses').innerText = data.weaknesses;
+                
+                const ul = document.getElementById('go-missions');
+                ul.innerHTML = '';
+                data.missions.forEach(m => {
+                    const li = document.createElement('li');
+                    li.innerText = m;
+                    ul.appendChild(li);
+                });
+                
+            } else if (data.state === "playing") {
+                document.getElementById('splash-screen').classList.add('hidden');
+                document.getElementById('gameover-screen').classList.add('hidden');
+                document.getElementById('game-arena').classList.remove('hidden');
+                
+                if (!data.last_result) {
+                    document.getElementById('action-dock').classList.remove('hidden');
+                    document.getElementById('result-overlay').classList.add('hidden');
+                    document.getElementById('result-overlay').classList.remove('opacity-100', 'scale-100');
+                }
+                
+                // Update HUD
+                document.getElementById('hud-score').innerText = data.score;
+                document.getElementById('hud-round').innerText = "Round: " + data.round;
+                document.getElementById('hud-lives').innerHTML = '<span class="material-symbols-outlined" style="font-variation-settings: \'FILL\' 1;">favorite</span>'.repeat(data.lives);
+                document.getElementById('hint-count').innerText = data.ai_uses;
+                
+                if (data.ai_uses <= 0) { document.getElementById('btn-hint').classList.add('hidden'); }
+                
+                // Update Candidate
+                const c = data.candidate;
+                document.getElementById('candidate-name').innerText = c.name;
+                document.getElementById('candidate-type').innerText = c.is_boss ? "👹 BOSS CANDIDATE" : "⚔️ CANDIDATE CARD";
+                document.getElementById('candidate-exp-text').innerText = c.experience.toFixed(1) + " yrs";
+                document.getElementById('candidate-exp-bar').style.width = Math.min((c.experience / 20) * 100, 100) + "%";
+                document.getElementById('candidate-skills').innerText = c.skills_count;
+                document.getElementById('candidate-armor').innerText = c.education == 5 ? "Ph.D" : (c.education == 1 ? "None" : "Degree");
+                document.getElementById('candidate-gap').innerText = c.gap_years > 0.1 ? c.gap_years.toFixed(1) + " yrs" : "None";
+                
+                // Ai Whisper logic
+                if (data.hint_shown) {
+                    document.getElementById('ai-secret').classList.remove('hidden');
+                    document.getElementById('ai-whisper-text').innerHTML = data.whisper.lines.join('<br>');
+                    document.getElementById('ai-prob').innerText = Math.round(data.whisper.prob * 100) + "%";
+                } else {
+                    document.getElementById('ai-secret').classList.add('hidden');
+                }
+            }
+        }
+
+        async function startGame() {
+            await fetch('/api/start', {
+                method: 'POST',
+                headers:{ "Content-Type": "application/json" },
+                body: JSON.stringify({ difficulty: "normal" })
+            });
+            fetchState();
+        }
+
+        async function submitAction(action) {
+            const res = await fetch('/api/action', {
+                method: 'POST',
+                headers:{ "Content-Type": "application/json" },
+                body: JSON.stringify({ action: action })
+            });
+            const data = await res.json();
+            
+            // Show result overlay
+            const ov = document.getElementById('result-overlay');
+            ov.classList.remove('hidden');
+            setTimeout(() => ov.classList.add('opacity-100', 'scale-100'), 10);
+            
+            document.getElementById('action-dock').classList.add('hidden');
+            
+            const boxColor = data.result.delta > 0 ? "border-green-500 text-green-400" : "border-error text-error";
+            ov.className = `fixed top-1/4 left-1/2 -translate-x-1/2 z-50 bg-surface-container-highest border-2 ${boxColor} rounded-xl p-8 shadow-[0_0_50px_rgba(0,0,0,0.8)] opacity-100 transition-all duration-300 transform scale-100 text-center min-w-[300px]`;
+            
+            document.getElementById('res-msg').innerHTML = data.result.msg.replace('\n', '<br>');
+            document.getElementById('res-sub').innerText = "Actual outcome: " + (data.result.outcome === 1 ? "Good Hire" : "Bad Hire");
+        }
+
+        async function nextRound() {
+            // we already advanced the round on the backend in /api/action
+            fetchState();
+        }
+
+        async function useHint() {
+            await fetch('/api/hint', { method: 'POST' });
+            fetchState();
+        }
+        
+        // Setup initial loop
+        fetchState();
+    </script>
+</body>
+</html>

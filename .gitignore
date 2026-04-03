@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Project-specific
+data/
+*.csv
+# Keep leaderboard.csv if it's essential for initial setup, but usually data isn't pushed.
+# I'll let the user decide if they want data, but normally data/ and .csv are excluded.
+# I'll leave leaderboard.csv alone for now as it's small and seems like a core part of the game's initial state.
